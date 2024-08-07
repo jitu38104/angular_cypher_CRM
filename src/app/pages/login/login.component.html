@@ -1,0 +1,32 @@
+<div class="login-container h-screen w-full">
+    <div class="header-bar h-1"><app-header></app-header></div>
+
+    <div class="main-box surface-900 h-11 w-full flex justify-content-center align-items-center">
+        <div class="login-panel surface-0">
+            <h2 class="text-center mb-3 pb-5">Login Here!</h2>
+            <div class="input-fields flex flex-column align-items-center">
+                <input [(ngModel)]="loginBody.username" class="w-10 mb-3 surface-0 shadow-2" placeholder="Username" type="email" />
+                <div class="password flex align-items-center justify-content-between w-10 mb-5 surface-0 shadow-2">
+                    <input (keyup)="onPressEnter($event)" [(ngModel)]="loginBody.password" class="w-full border-none outline-none" placeholder="Password" [type]="shouldPasswordVisible?'text':'password'" />
+                    <i (click)="shouldPasswordVisible=!shouldPasswordVisible" class="pi pi-eye{{shouldPasswordVisible?'-slash':''}}"></i>
+                </div>
+                <button class="active-shadow w-10 shadow-3 {{isBtnClicked?'opacity-70':''}}" [disabled]="isBtnClicked" (click)="onLoginSubmit()">{{(!isBtnClicked?'login':'logging in...') | uppercase}}</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div class="main-box surface-900 h-11 w-full flex justify-content-center align-items-center">
+        <div class="login-panel surface-0">
+            <h2 class="text-center mb-3 pb-5">Login Here!</h2>
+            <div class="input-fields flex flex-column align-items-center">
+                <input *ngIf="!hasUsernameTyped" [(ngModel)]="loginBody.username" class="w-10 mb-5 surface-0 shadow-2" placeholder="Username" type="email" />
+                <input *ngIf="hasUsernameTyped" [(ngModel)]="loginBody.password" class="w-10 mb-5 surface-0 shadow-2 text-center" placeholder="Type OTP here..." type="text" />
+                <button class="active-shadow w-10 shadow-3" (click)="onLoginOtp()">{{otpBtn | uppercase}}</button>
+            </div>
+        </div>
+    </div> -->
+
+    
+</div>
+

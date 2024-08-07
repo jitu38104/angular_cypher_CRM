@@ -1,0 +1,71 @@
+<div class="attendance-container w-full h-full">
+    <div class="header-box flex align-items-center justify-content-between w-full">
+        <div class="left-options flex align-items-center">
+            <button pButton pRipple label="Back" class="p-button-danger mr-4" routerLink="/admin"></button>
+            <div class="user-list mr-4">
+                <i class="pi pi-user mr-1"></i>&nbsp;
+                <select [(ngModel)]="apiBody.userId">
+                    <option value="">--Select User--</option>
+                    <option value="all">All</option>
+                    <option value="{{item?.id}}" *ngFor="let item of assigneeList">{{item?.name|titlecase}}</option>
+                </select>
+            </div>
+            <div class="date-box flex align-items-center mr-2">
+                <div class="from mr-3">
+                    <label for="fromCal" class="mr-1">From:&nbsp;&nbsp;</label>
+                    <input [(ngModel)]="apiBody.from" id="fromCal" type="date" pInputText onfocus="this.showPicker()" />
+                </div>
+                <div class="to">
+                    <label for="toCal" class="mr-1">To:&nbsp;&nbsp;</label>
+                    <input [(ngModel)]="apiBody.to" id="toCal" type="date" pInputText onfocus="this.showPicker()" />
+                </div>
+            </div>
+            <button pButton pRipple class="p-button-success" (click)="onSearchUserAttendance()"><i class="pi pi-search"></i></button>
+        </div>
+        <div class="right-options pr-3">
+            <i *ngIf="attendanceData.length>0" (click)="onClickExcelFile()" tooltipPosition="left" pTooltip="Download XLSX" class="pi pi-file-excel"></i>
+        </div>
+    </div>
+
+    <div class="grid-box w-full">
+        <h3 class="w-full flex align-items-center">
+            <span class="text-center">User Attendance</span>
+            <div class="check" *ngIf="isSingleDateSelected && tempAttendanceData.length>1 && apiBody.userId!='all'">
+                <input type="checkbox" (click)="onClickCheckbox($event)" />
+                <span>&nbsp;&nbsp;Remove Duplicacy</span>
+            </div>
+        </h3>
+        <div class="table-box w-11 mx-auto">
+            <table class="w-full">
+                <thead class="sticky top-0">
+                    <th *ngFor="let head of tableHeads;">{{head}}</th>
+                </thead>
+                <tbody>
+                    <tr id="{{item?.id}}" *ngFor="let item of attendanceData;let i=index">
+                        <td>{{i+1}}</td>
+                        <td>{{item?.Date | date:'dd/MM/yyyy'}}</td>
+                        <td>{{item?.Date | date:'EEEE'}}</td>
+                        <td>{{item?.name | titlecase}}</td>
+                        <td>{{item?.email | uppercase}}</td>
+                        <td>{{item?.login_time || '--:--'}}</td>
+                        <td>{{item?.logout_time || '--:--'}}</td>
+                        <td>{{item?.total_minutes || 0}}</td>
+                    </tr>
+                    <tr *ngIf="attendanceData.length>0 && isSingleDateSelected && apiBody.userId!='all'">
+                        <td class="text-end pr-4" colspan="7"><b>Total</b></td>
+                        <td>{{totalMinutes}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="spinner w-full" *ngIf="attendanceData.length==0">
+                <div *ngIf="isApiInProcess"
+                    class="spinner-icon flex flex-column justify-content-center align-items-center">
+                    <i class="pi pi-spin pi-spinner mb-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div *ngIf="!isApiInProcess" class="empty-data flex justify-content-center align-items-center">No Data Available</div>
+            </div>
+        </div>
+    </div>
+</div>

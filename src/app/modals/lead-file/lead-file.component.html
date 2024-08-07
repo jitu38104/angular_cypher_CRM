@@ -1,0 +1,24 @@
+<div class="file-container w-full h-full flex justify-content-center align-items-center relative">
+    <span class="close-btn absolute top-0 right-0"><i (click)="onDismissModal()" class="pi pi-times"></i></span>
+    <div class="center-box">
+        <h3 *ngIf="!isApiInProcess" class="text-center mb-3" style="color:#3d3c3c;">Import CSV File</h3>
+        <div class="input-field" *ngIf="!isApiInProcess">
+            <input type="file" (change)="onSelectFile($event)" [accept]="acceptExcelFormats" class="hidden" #fileInp />
+            <div class="input-box" (click)="openExcelFileInp(fileInp)"><span>{{fileName}}</span><i class="pi pi-caret-down"></i></div>
+            <div class="text-center w-full">
+                <button #submitBtn pButton pRipple label="Submit" class="p-button-success mr-2" (click)="onSubmit(submitBtn)"></button>
+                <button pButton pRipple label="Cancel" class="p-button-danger" (click)="onDismissModal()"></button>
+            </div>
+        </div>
+
+        <div class="spinner loading" *ngIf="isApiInProcess">
+            <div class="spinner-icon flex flex-column justify-content-center align-items-center">
+                <i class="pi pi-spin pi-spinner mb-2 hidden"></i>
+                <div class="w-5 absolute"><img class="w-full h-full" src="assets/images/cloud-uploading.gif" alt=""></div>
+                <span>Uploading...</span>
+            </div>
+            <p class="text-center text-teal-700" *ngIf="isSevenSecPassed">It may take a while</p>
+        </div>
+    </div>
+</div>
+

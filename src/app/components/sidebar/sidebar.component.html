@@ -1,0 +1,13 @@
+<div class="aside w-full h-full surface-900">
+    <div class="option-list surface-900">
+        <div class="option" *ngFor="let item of sideOptions;" (click)="onClickSideOption($event, item)">
+            <div class="parent {{item?.isDisable?'opacity-20':''}} flex align-items-center justify-content-between">
+                {{item?.optionName | titlecase}} 
+                <i *ngIf="item?.children.length>0" class="pi pi-angle-right"></i>
+            </div>
+            <div class="children" *ngIf="item?.children.length>0 && !item?.isDisable" id="{{item?.id}}">
+                <div class="child {{item2?.isDisable?'opacity-20':''}}" [routerLink]="['lead', item2?.id]" *ngFor="let item2 of item?.children">{{item2?.optionName | titlecase}}</div>
+            </div>
+        </div>
+    </div>
+</div>

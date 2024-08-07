@@ -1,0 +1,42 @@
+<div class="leads-container w-full h-full">
+    <div class="header-box flex align-items-center w-full">
+        <button pButton pRipple label="Back" class="p-button-danger mr-4" routerLink="/admin"></button>
+        <div class="user-list mr-4">
+            <i class="pi pi-user mr-1"></i>&nbsp;
+            <select (change)="onChangeSelect($event)">
+                <option value="">All Users</option>
+                <option value="{{item?.id}}" *ngFor="let item of assigneeList">{{item?.name|titlecase}}</option>
+            </select>
+        </div>
+
+        <!-- <div class="user-list mr-4">
+            <i class="fa-regular fa-file-lines mr-1"></i>&nbsp;
+            <select [(ngModel)]="choosenStatus">
+                <option value="">--Select Status--</option>
+                <option value="{{item?.value}}" *ngFor="let item of statusType">{{item?.label}}</option>
+            </select>
+        </div> -->
+
+        <!-- <div class="date-box flex align-items-center mr-2">
+            <div class="from mr-3">
+                <label for="fromCal" class="mr-1">From:&nbsp;</label>
+                <input [(ngModel)]="apiBody.from" id="fromCal" type="date" pInputText onfocus="this.showPicker()"/>                
+            </div>
+            <div class="to">
+                <label for="toCal" class="mr-1">To:&nbsp;</label>
+                <input [(ngModel)]="apiBody.to" id="toCal" type="date" pInputText onfocus="this.showPicker()"/>
+            </div>
+        </div> -->
+        <!-- <button pButton pRipple class="p-button-success" (click)="OnSearchUserLeads()"><i class="pi pi-search"></i></button> -->
+    </div>
+
+
+    <div class="grid-box">
+        <app-lead 
+            [isHomePage]="false" 
+            [currentStage]="'open'"
+            [isApiInProcess]="isApiInProcess">
+        </app-lead>
+    </div>
+</div>
+

@@ -1,0 +1,394 @@
+<div class="invoice-container relative h-full">
+    <header class="w-full h-1 bg-dark flex justify-content-between align-items-center">
+        <h3>{{currentStage=='tax'? 'Update Tax Invoice': isAddPI ? 'Add proforma Invoice' : 'Set Proforma Invoice'}}</h3>
+        <i class="pi pi-times" (click)="onDismissModal()"></i>
+    </header>
+
+    <div class="invoice-form" *ngIf="!isAddPI">
+        <div class="form-body">
+            <div *ngIf="orderNum" class="order-num mb-3">Order Number:&nbsp;&nbsp;{{orderNum}}</div>
+            <section class="first flex align-items-center justify-content-between">
+                <div class="company flex align-items-center">
+                    <i class="pi pi-pencil" (click)="visibleDialogue3=true"></i>
+                    <i class="pi pi-building"></i>
+                    <h3 class="m-0">{{companyName}}</h3>
+                </div>
+    
+                <div class="inp-form relative flex">
+                    <select class="mr-1" [(ngModel)]="issuedBy">
+                        <option value="">--Issued By--</option> 
+                        <option value="{{item?.id}}" *ngFor="let item of assigneeList">{{item?.name}}</option>
+                    </select>
+                    <input class="mr-1" type="text" placeholder="User Name" [(ngModel)]="userName" />
+                    <input *ngIf="currentStage=='tax'" class="mr-1" type="text" placeholder="Invoice Number" [(ngModel)]="taxNum" />
+                    <input type="date" [(ngModel)]="invoiceDate" onfocus="this.showPicker()" />
+    
+                    <span class="{{currentStage=='tax'? 'all '+item: 'not-all '+item}} absolute" *ngFor="let item of labels">{{item | titlecase}}</span> 
+                </div>
+            </section>
+    
+            <section class="second flex justify-content-between">
+                <div class="billing">
+                    <div class="header flex">
+                        <span>Billing Address</span>
+                        <div class="icons">
+                            <i class="pi pi-pencil" (click)="onClickEdit('address')"></i>
+                        </div>
+                    </div>
+    
+                    <div class="address">
+                        <div class="address-line">{{address.billing.line1}}</div>
+                        <div class="address-line">{{address.billing.line2}}</div>
+                        <div class="gst"><span>GSTIN:&nbsp;{{gstNum}}</span></div>
+                        <div class="gst"><span>Email:&nbsp;{{email}}</span></div>
+                    </div>
+                </div>
+    
+                <div class="shipping">
+                    <div class="header flex">
+                        <span>Shipping Address</span>
+                        <div class="icons">
+                            <i class="pi pi-pencil" (click)="onClickEdit('address')"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="address" *ngIf="isSameAdd">
+                        <div class="address-line">{{address.shipping.line1}}</div>
+                        <div class="address-line">{{address.shipping.line2}}</div>
+                        <div class="gst"><span>GSTIN:&nbsp;{{gstNum}}</span></div>
+                        <div class="gst"><span>Email:&nbsp;{{email}}</span></div>
+                    </div>
+                    <div class="same-as mt-2 flex align-items-center">
+                        <input class="mr-1" type="checkbox" (click)="onClickCheck($event)" [checked]="isSameAdd" /><span>Same as Billing Address</span>
+                    </div>
+                </div>
+            </section>
+    
+            <section class="third w-full">
+                <table class="w-full">
+                    <thead>
+                        <th *ngFor="let item of tableHeads">{{item}}</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div>
+                                    <h4>{{selectedReport | uppercase}}</h4>
+                                    <!-- <span>Duration - {{tableData.duration}}</span> -->
+                                    <span>{{tableData.duration}}</span>
+                                </div>
+                            </td>
+                            <td>{{tableData.hsnCode}}</td>
+                            <td>{{tableData.qty}}</td>
+                            <td>{{tableData.unit}}</td>
+                            <td>{{convertNumToString(tableData.rate)}}</td>
+                            <!-- <td>{{convertNumToString(tableData.taxable)}}</td> -->
+                            <td>{{convertNumToString(tableData.rate)}}</td>
+                            <td *ngIf="doesUserBelongToDelhi">{{convertNumToString(tableData.gst.cgst, false)}}%</td>
+                            <td *ngIf="doesUserBelongToDelhi">{{convertNumToString(tableData.gst.sgst, false)}}%</td>
+                            <td *ngIf="!doesUserBelongToDelhi">{{convertNumToString(tableData.gst.igst, false)}}%</td>
+                            <td>{{convertNumToString(tableData.amount)}}</td>
+                            <td class="icon"><i class="pi pi-pencil" (click)="onClickEdit('table')"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+    
+            <section class="forth flex justify-content-between">
+                <div class="bank-details flex flex-column justify-content-center">
+                    <div class="header flex justify-content-between align-items-center"><span>Bank Details</span><i class="pi pi-pencil" (click)="onClickEdit('bank')"></i></div>
+                    <div class="bank-desc">
+                        <div class="data"><span>Bank Name:</span> <span>{{bankDetails.bankName}}</span></div>
+                        <div class="data"><span>Branch:</span> <span>{{bankDetails.branch}}</span></div>
+                        <div class="data"><span>Account No:</span> <span>{{bankDetails.accountNo}}</span></div>
+                        <div class="data"><span>IFSC:</span> <span>{{bankDetails.ifsc}}</span></div>
+                    </div>
+                </div>
+    
+                <div class="total">
+                    <div class="data"><span>Total Amount Before Tax:</span> <span>{{convertNumToString(tableData.rate)}}</span></div>
+                    <div *ngIf="doesUserBelongToDelhi" class="data"><span>Add CGST:</span> <span>{{convertNumToString(tableData.gstAmt.cgst)}}</span></div>
+                    <div *ngIf="doesUserBelongToDelhi" class="data"><span>Add SGST:</span> <span>{{convertNumToString(tableData.gstAmt.sgst)}}</span></div>
+                    <div *ngIf="!doesUserBelongToDelhi" class="data"><span>Add IGST:</span> <span>{{convertNumToString(tableData.gstAmt.igst)}}</span></div>
+                    <div class="data"><span>Tax Amount:</span> <span>{{convertNumToString(tableData.taxable)}}</span></div>
+                    <div class="data"><span>Discount:</span> <span></span>{{convertNumToString(tableData.discount)}}</div>
+                    <div class="data grand"><span>Grand Total:</span> <span>{{convertNumToString(tableData.amount)}}</span></div>
+                </div>
+            </section>
+    
+            <section class="fifth" *ngIf="!isAddingNewPI">
+                <div class="pi-status mb-3">
+                    <span>Payment Status:</span>
+                    <select [(ngModel)]="paymentStatus">
+                        <option value="pending">Pending</option>
+                        <option value="partial">Partial Paid</option>
+                        <option value="full">Fully Paid</option>
+                        <option value="cash">Cash Paid</option>
+                    </select>
+                </div>
+                
+                <div class="check-fields flex align-items-center mb-3">
+                    <span>Portal Data Type:</span>
+                    <div class="radios flex align-items-center ml-3">
+                        <div class="radio flex align-items-center mr-1">
+                            <p-radioButton name="mail" value="online" [(ngModel)]="portalDataType" inputId="dataType1"></p-radioButton>
+                            <label for="dataType1" class="ml-2">Online</label>
+                        </div>
+                        <div class="radio flex align-items-center">
+                            <p-radioButton name="mail" value="offline" [(ngModel)]="portalDataType" inputId="dataType2"></p-radioButton>
+                            <label for="dataType2" class="ml-2">Offline</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="check-fields flex align-items-center mb-3">
+                    <span>Do you want to send mail to client?</span>
+                    <div class="radios flex align-items-center ml-3">
+                        <div class="radio flex align-items-center mr-1">
+                            <p-radioButton name="mail" value="yes" [(ngModel)]="isMailNeeded" inputId="ingredient1"></p-radioButton>
+                            <label for="ingredient1" class="ml-2">Yes</label>
+                        </div>
+                        <div class="radio flex align-items-center">
+                            <p-radioButton name="mail" value="no" [(ngModel)]="isMailNeeded" inputId="ingredient2"></p-radioButton>
+                            <label for="ingredient2" class="ml-2">No</label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="attachment" *ngIf="isMailNeeded=='yes'">
+                    <span>What type of attachement you need for mail?</span>
+                    <div class=" mt-2">
+                        <div class="flex align-items-center gap-1" *ngFor="let item of checkboxesOptions;let i=index">
+                            <p-checkbox value="{{item.val}}" (click)="onSetAttachment(item.val)" [(ngModel)]="attachmentType" inputId="input-{{i}}"></p-checkbox>
+                            <label for="input-{{i}}">{{item.key}}</label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    
+        <div class="submit-btn w-full flex align-items-center justify-content-between text-right absolute bg-white bottom-0">
+            <div class="check-box d-flex">
+                <div class="mr-3">
+                    <input type="checkbox" (click)="setUserDetailsRemoved($event, 'pdfData')" />
+                    <span class="ml-1">Remove user details(print)</span>
+                </div>
+                <div>
+                    <input type="checkbox" [checked]="isStampRequired" (click)="setUserDetailsRemoved($event, 'stamp')" />
+                    <span class="ml-1">Remove Stamp</span>
+                </div>
+            </div>
+
+            <div class="btns-grp">
+                <button *ngIf="!isAddingNewPI" title="Print Tax Invoice" pButton pRipple label="Print" class="border-purple-500 bg-purple-500 mr-2" (click)="onClickPrint()"></button>
+                <button title="Send Tax Invoice" pButton pRipple label="Email" class="p-button-primary mr-2" (click)="onSendEmail()" *ngIf="currentStage=='tax'"></button>
+                <button title="Create new tax invoice" *ngIf="!isAddingNewPI && currentStage=='invoice' && paymentStatus!='cash'" pButton pRipple label="Update" class="p-button-success mr-2" (click)="onUpdateInvoice()"></button>
+                <button title="Create new tax invoice" *ngIf="!isAddingNewPI" pButton pRipple label="{{currentStage=='tax'?'Update':'Create Tax'}}" class="p-button-warning mr-2" (click)="onSubmit()"></button>
+                <button title="Set lead closed" *ngIf="((currentStage=='tax') || (currentStage=='invoice' && paymentStatus=='cash')) && !isLeadAlreadyClosed" pButton pRipple label="Close Lead" class="p-button-success mr-2" (click)="visibleDialogue4=true"></button>
+                <button title="Create new PI" *ngIf="isAddingNewPI" pButton pRipple label="Submit" class="p-button-success mr-2" (click)="onClickNewAdd()"></button>
+                <button title="Delete" pButton pRipple label="Delete" class="p-button-danger mr-2" (click)="visibleDialogue5=true"></button>
+                <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="onDismissModal()"></button>
+            </div>
+        </div>
+    
+        <div *ngIf="isApiInProcess" class="loading-screen absolute bottom-0 flex justify-content-center align-items-center w-full">
+            <div class="loading flex flex-column justify-content-center align-items-center">
+                <i class="pi pi-spin pi-spinner mb-1"></i>
+                <span>Please wait...</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isAddPI" class="add-pi flex align-items-center justify-content-center h-full w-full">
+        <div class="center-box w-full">
+            <h3 class="mb-3">Select Company</h3>
+            <div class="dropdown flex justify-content-between px-4" (click)="visibleDialogue2=true">
+                <span>{{choosenCompany.name==''?'Select Company Name':(choosenCompany?.name | uppercase)}}</span>
+                <i class="pi pi-caret-down"></i>
+            </div>
+            <div class="submit mt-4 w-full text-center">
+                <!-- <button pButton pRipple label="Add New" class="p-button-danger bg-red-400 mr-3" (click)="onClickAddNew()"></button> -->
+                <button pButton pRipple label="Next" [disabled]="choosenCompany?.name.length==0" class="p-button-success" (click)="getSingleCompanyDetail()"></button>
+            </div>
+        </div>
+
+        <div *ngIf="isApiInProcess" class="loading-screen absolute bottom-0 flex justify-content-center align-items-center w-full">
+            <div class="loading flex flex-column justify-content-center align-items-center">
+                <i class="pi pi-spin pi-spinner mb-1"></i>
+                <span>Please wait...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p-dialog id="dialog5" [(visible)]="visibleDialogue3" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '40%', height: '25%'}">
+    <div class="edit-box flex flex-column justify-content-center">
+        <input class="mb-3" type="text" [(ngModel)]="companyName" placeholder="Company Name" />
+        <button pButton pRipple label="Submit" class="p-button-success w-6 mx-auto" (click)="visibleDialogue3=false"></button>
+    </div>
+</p-dialog>
+
+<p-dialog id="dialog2" [(visible)]="visibleDialogue" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '75%', height: '75%'}">
+    <div class="content h-full popup-container relative">
+        <h3 class="text-center sticky top-0 bg-white">Edit {{editFormType | titlecase}}</h3>
+        <section class="first mb-3" *ngIf="editFormType=='address'">
+            <div class="fieldset">
+                <div class="legend">Billing Address</div>
+                <div class="form-box">
+                    <span class="p-float-label">
+                        <input pInputText id="address1" [(ngModel)]="address.billing.line1" />
+                        <label htmlFor="address1">Address Line 1</label>
+                    </span>
+                    <span class="p-float-label">
+                        <input pInputText id="address2" [(ngModel)]="address.billing.line2" />
+                        <label htmlFor="address2">Address Line 2</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="as-same flex mb-5 mt-1">
+                <input [checked]="isSameAdd" type="checkbox" (click)="onClickCheck($event)" /><span>Same as billing address</span>
+            </div>
+            <div class="fieldset mb-3">
+                <div class="legend">Shippping Address</div>
+                <div class="form-box">
+                    <span class="p-float-label">
+                        <input pInputText id="address3" [(ngModel)]="address.shipping.line1" />
+                        <label htmlFor="address3">Address Line 1</label>
+                    </span>
+                    <span class="p-float-label">
+                        <input pInputText id="address4" [(ngModel)]="address.shipping.line2" />
+                        <label htmlFor="address4">Address Line 2</label>
+                    </span>
+                </div>
+            </div>
+
+            <span class="flex">
+                <div class="email-drop flex align-items-end">
+                    <div class="mr-4">Email: </div>
+                    <select [(ngModel)]="email">
+                        <option value="">--Select Email--</option>
+                        <option value="{{item}}" *ngFor="let item of emailArr">{{item | titlecase}}</option>
+                    </select>
+                </div>
+                <div class="email-drop flex align-items-end ml-5">
+                    <div class="mr-4">GST: </div>
+                    <input pInputText placeholder="GST Number" [(ngModel)]="gstNum" />
+                </div>
+            </span>
+        </section>
+    
+        <section class="second mb-3" *ngIf="editFormType=='table'">
+            <select [(ngModel)]="selectedReport" class="mb-5">
+                <option value="">-- Select Report Type --</option>
+                <option value="{{item?.report_name}}" *ngFor="let item of reportType">{{item?.report_name | titlecase}}</option>
+            </select>
+
+            <div class="input-box">
+                <div class="input-fields mb-4">
+                    <span>Duration</span>
+                    <input type="text" [(ngModel)]="tableData.duration">
+                </div>
+                <div class="input-fields mb-4">
+                    <span>HSN/SAC</span>
+                    <input type="text" [(ngModel)]="tableData.hsnCode">
+                </div>
+                <div class="input-fields mb-4">
+                    <span>Quantity</span>
+                    <input type="number" [(ngModel)]="tableData.qty" [disabled]="isAddingNewPI">
+                </div>
+                <div class="input-fields mb-4">
+                    <span>Unit</span>
+                    <input type="text" [(ngModel)]="tableData.unit" [disabled]="isAddingNewPI">
+                </div>
+                <div *ngIf="doesUserBelongToDelhi" class="input-fields mb-4">
+                    <span>CGST(%)</span>
+                    <input type="number" [(ngModel)]="tableData.gst.cgst" [disabled]="isAddingNewPI">
+                </div>
+                <div *ngIf="doesUserBelongToDelhi" class="input-fields mb-4">
+                    <span>SGST(%)</span>
+                    <input type="number" [(ngModel)]="tableData.gst.sgst" [disabled]="isAddingNewPI">
+                </div>
+                <div *ngIf="!doesUserBelongToDelhi" class="input-fields mb-4">
+                    <span>IGST(%)</span>
+                    <input type="number" [(ngModel)]="tableData.gst.igst" [disabled]="isAddingNewPI">
+                </div>
+                <div class="input-fields mb-4">
+                    <span>Discount(₹)</span>
+                    <input (keyup)="onCalculateTax()" type="number" [(ngModel)]="tableData.discount">
+                </div>
+                <div class="input-fields mb-4">
+                    <span>Rate(₹)</span>
+                    <input (keyup)="onCalculateTax()" type="text" [(ngModel)]="tableData.rate">
+                </div>
+                <div class="input-fields mb-4">
+                    <span>Taxable(₹)</span>
+                    <input [disabled]="true" type="text" [(ngModel)]="tableData.taxable">
+                </div>
+                <div class="input-fields">
+                    <span>Amount(₹)</span>
+                    <input [disabled]="true" type="text" [(ngModel)]="tableData.amount">
+                </div>
+            </div>
+        </section>
+    
+        <section class="third" *ngIf="editFormType=='bank'">
+            <div class="input-fields mb-4">
+                <span>Bank Name</span>
+                <input type="text" [(ngModel)]="bankDetails.bankName">
+            </div>
+            <div class="input-fields mb-4">
+                <span>Bank Branch</span>
+                <input type="text" [(ngModel)]="bankDetails.branch">
+            </div>
+            <div class="input-fields mb-4">
+                <span>Account No</span>
+                <input type="text" [(ngModel)]="bankDetails.accountNo">
+            </div>
+            <div class="input-fields mb-4">
+                <span>IFSC</span>
+                <input type="text" [(ngModel)]="bankDetails.ifsc">
+            </div>
+        </section>
+
+        <div class="btn-box text-right w-full bottom-0 bg-white {{editFormType=='table'?'sticky':'absolute'}}">
+            <button pButton pRipple label="Submit" class="p-button-success mr-2" (click)="visibleDialogue=false"></button>
+            <button pButton pRipple label="Cancel" class="p-button-danger" (click)="visibleDialogue=false"></button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog id="dialog3" [(visible)]="visibleDialogue2" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '35%', height: '55%'}">
+    <div class="dropdown-box">
+        <input type="text" placeholder="Search company name" [(ngModel)]="keyUpCompanyStr" (keyup)="onSerchCompany()" />
+        <div class="drop-options">
+            <div class="option" (click)="onSelectCompany(item)" *ngFor="let item of copyCompaniesList">{{item.company_name | uppercase}}</div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog id="dialog1" [(visible)]="visibleDialogue4" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '30vw', height: '20vh'}">
+    <div class="content">
+        <p class="text-center">Do you agree to close the targeted lead?</p>
+        <div class="btns flex justify-content-center align-items-center">
+            <button pButton pRipple [label]="'Yes, I agree!'" class="p-button-success mr-2" (click)="onCloseLead()"></button>
+            <button pButton pRipple label="Cancel" (click)="visibleDialogue4=false" class="p-button-danger"></button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog id="dialog1" [(visible)]="visibleDialogue5" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '30vw', height: '20vh'}">
+    <div class="content">
+        <p class="text-center">Do you agree to delete the targeted lead?</p>
+        <div class="btns flex justify-content-center align-items-center">
+            <button pButton pRipple [label]="'Yes, I agree!'" class="p-button-success mr-2" (click)="onClickDelete()"></button>
+            <button pButton pRipple label="Cancel" (click)="visibleDialogue5=false" class="p-button-danger"></button>
+        </div>
+    </div>
+</p-dialog>
+
+<!-- <p-toast position="bottom-right"></p-toast> -->
+
+

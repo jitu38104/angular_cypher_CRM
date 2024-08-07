@@ -1,0 +1,212 @@
+<div class="lead-edit-container h-full w-full flex">
+    <i class="pi pi-times absolute" (click)="onDismissModal()"></i>
+
+    <section class="upper h-full w-full overflow-auto">
+        <section class="upper w-full overflow-auto mb-1">
+            <h3 class="text-center sticky top-0 bg-white z-5">Edit Lead <i class="pi pi-file-edit float-right absolute" pTooltip="Edit Lead" (click)="onClickEdit()"></i></h3>
+            <div class="input-data overflow-auto" *ngIf="!isNotEditMode">
+                <div class="input-field">
+                    <span>Company Name</span>
+                    <input type="text" [(ngModel)]="excelModelVal.company" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>Client Name</span>
+                    <input type="text" [(ngModel)]="excelModelVal.username" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>Email &nbsp;<i class="pi pi-plus-circle" (click)="onAddItem('email')"></i></span>
+                    <span class="flex align-items-center justify-content-between w-full" *ngFor="let item of this.listArr['email'];let i=index">
+                        <input type="text" class="email-fields mb-1 w-95" [(ngModel)]="item.value" pInputText />
+                        <i class="pi pi-times-circle" (click)="onRemoveItem('email', i)"></i>
+                    </span>
+                </div>
+                <div class="input-field">
+                    <span>Contact Number &nbsp;<i class="pi pi-plus-circle" (click)="onAddItem('contact')"></i></span>
+                    <span class="flex align-items-center justify-content-between w-full" *ngFor="let item of this.listArr['contact'];let i=index">
+                        <input type="text" class="contact-fields mb-1 w-95"  [(ngModel)]="item.value" pInputText />
+                        <i class="pi pi-times-circle" (click)="onRemoveItem('contact', i)"></i>
+                    </span>
+                </div>
+                <div class="input-field">
+                    <span>Designation</span>
+                    <input type="text" [(ngModel)]="excelModelVal.designation" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>Department</span>
+                    <input type="text" [(ngModel)]="excelModelVal.department" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>Address</span>
+                    <input type="text" [(ngModel)]="excelModelVal.address" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>Location</span>
+                    <input type="text" [(ngModel)]="excelModelVal.location" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>GST Number</span>
+                    <input type="text" [(ngModel)]="excelModelVal.gst" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>PAN Number</span>
+                    <input type="text" [(ngModel)]="excelModelVal.pan" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>IEC Number</span>
+                    <input type="text" [(ngModel)]="excelModelVal.iec" pInputText />
+                </div>
+                <div class="input-field">
+                    <span>Source</span>
+                    <select [(ngModel)]="excelModelVal.source">
+                        <option value="">--Select Source--</option>
+                        <option value="{{item}}" *ngFor="let item of sourceList">{{item | titlecase}}</option>
+                    </select>
+    
+                    <div class="reference-box" *ngIf="excelModelVal.source=='reference'">
+                        <input type="text" [(ngModel)]="excelModelVal.reference.name" placeholder="Reference Name" pInputText />
+                        <input type="text" [(ngModel)]="excelModelVal.reference.company" placeholder="Reference Company" pInputText />
+                        <input type="text" [(ngModel)]="excelModelVal.reference.contact" placeholder="Reference Contact" pInputText />
+                        <input type="text" [(ngModel)]="excelModelVal.reference.designation" placeholder="Reference Designation" pInputText />
+                    </div>
+                </div>
+                <div class="input-field">
+                    <span>Remark</span>
+                    <textarea  rows="5" class="w-full" [(ngModel)]="excelModelVal.remark" pInputTextarea [autoResize]="false"></textarea>
+                </div>
+    
+                <!-- <div class="submitBtn text-center mb-4"><button pButton pRipple [label]="isSubmitClicked?'Updating...':'Update'" [disabled]="isSubmitClicked" class="p-button-success" (click)="onClickUpdate()"></button></div> -->
+            </div>        
+    
+            <div class="lead-description overflow-auto" *ngIf="isNotEditMode">
+                <div class="see-less" *ngIf="!isSeeMoreClicked">
+                    <div class="data-item w-full flex align-items-start" *ngFor="let item of leadModelArr.slice(0, 5)">
+                        <div class="label w-8">{{item['label']}}</div>
+                        <div class="value w-8">
+                            
+                            <span>
+                                {{errorTypes.includes(tempLeadData[item.key]) ? 'N/A' : getFirstItem(tempLeadData[item.key], item.key)+'' | uppercase}}&nbsp;&nbsp;
+                                <i *ngIf="['contact','email'].includes(item.key) && getContactList(tempLeadData[item.key]).length>1" class="pi pi-angle-{{hideMultiOption[item.key]?'up':'down'}}" (click)="hideMultiOption[item.key]=!hideMultiOption[item.key]"></i>
+                            </span>
+                            <div class="more-options w-{{item.key=='contact'?'9':'full'}} {{!hideMultiOption[item.key]?'hide-box':''}}" *ngIf="['contact','email'].includes(item.key)">
+                                <div class="items" *ngFor="let item of getContactList(tempLeadData[item.key])">{{item | uppercase}}</div>
+                            </div>
+                        
+                            <!-- {{errorTypes.includes(tempLeadData[item.key]) ? 'N/A' : tempLeadData[item.key]+'' | uppercase}} -->
+                        </div>
+                    </div>
+                    <div class="see-more-option flex align-items-center" *ngIf="!isSeeMoreClicked" (click)="isSeeMoreClicked=true">
+                        <span>See more</span> <i class="pi pi-angle-down"></i>
+                    </div>                
+                </div>
+                <div class="see-more w-full" *ngIf="isSeeMoreClicked">
+                    <div class="data-item w-full {{item.key=='source_detail'?'pt-0':''}}" *ngFor="let item of leadModelArr">
+                        <span class="w-full flex align-items-start" *ngIf="item.key!='source_detail'">
+                            <div class="label w-8">{{item['label']}}</div>
+                            <div class="value  w-8">
+                                <span>
+                                    {{errorTypes.includes(tempLeadData[item.key]) ? 'N/A' : getFirstItem(tempLeadData[item.key], item.key)+'' | uppercase}}&nbsp;&nbsp;
+                                    <i *ngIf="['contact','email'].includes(item.key) && getContactList(tempLeadData[item.key]).length>1" class="pi pi-angle-{{hideMultiOption[item.key]?'up':'down'}}" (click)="hideMultiOption[item.key]=!hideMultiOption[item.key]"></i>
+                                </span>
+                                <div class="more-options w-{{item.key=='contact'?'9':'full'}} {{!hideMultiOption[item.key]?'hide-box':''}}" *ngIf="['contact','email'].includes(item.key)">
+                                    <div class="items" *ngFor="let item of getContactList(tempLeadData[item.key])">{{item | uppercase}}</div>
+                                </div>
+                            </div>
+                        </span>
+                        <span class="reference-box w-full" *ngIf="item.key=='source_detail'">
+                            <span *ngFor="let item of getItemInArray(tempLeadData[item.key])">
+                                <span class="flex align-items-start" *ngFor="let item2 of referenceKeys">
+                                    <div class="label w-9">{{item2.label}}</div>
+                                    <div class="value w-8">{{errorTypes.includes(item[item2.key]) ? 'N/A' : item[item2.key] | uppercase}}</div>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="see-less-option flex align-items-center" (click)="isSeeMoreClicked=false">
+                        <span>See less</span>  <i class="pi pi-angle-up"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div *ngIf="!isNotEditMode" class="submitBtn text-center mb-4"><button pButton pRipple [label]="isSubmitClicked?'Updating...':'Update'" [disabled]="isSubmitClicked" class="p-button-success" (click)="onClickUpdate()"></button></div>
+    </section>
+    
+    <section class="below h-full w-full">
+        <div class="assign-container h-full pt-3 overflow-auto">
+            <div class="lead-status">
+                <span class="label">Status</span>
+                <select [(ngModel)]="currentLeadStatus" [disabled]="['invoice','tax'].includes(currentLeadPage)" (change)="onSelectEditStatus()">
+                    <option value="">--Select Status--</option>
+                    <!-- [disabled]="currentLeadPage==item" -->
+                    <option value="{{item?.id}}" *ngFor="let item of statusOptions">{{item?.label}}</option>
+                </select>
+            </div>
+
+            <div class="generated-inputs relative" *ngIf="currentLeadStatus!=''">
+                <span class="absolute">{{currentLeadStatus | titlecase}}</span>
+
+                <div *ngIf="currentLeadStatus=='demo' || currentLeadStatus=='follow-up'">
+                    <div class="input-field flex flex-column">
+                        <span class="label mb-2">Date & Time<span class="imp">*</span></span>
+                        <div class="inp flex">
+                            <input class="mr-3 datetime" type="date" [(ngModel)]="dateTime.date" onfocus="this.showPicker()" />
+                            <input type="time" class="datetime" [(ngModel)]="dateTime.time" onfocus="this.showPicker()" />
+                        </div>
+                    </div>
+    
+                    <div class="input-field flex flex-column" *ngIf="currentLeadStatus=='demo'">
+                        <span class="label mb-2">Assign To<span class="imp">*</span></span>
+                        <select class="w-full assignTo" [(ngModel)]="assignedUser">
+                            <option value="">--Select Assignee--</option>
+                            <option value="{{item?.id}}" *ngFor="let item of assigneeList">{{item?.name | titlecase}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="currentLeadStatus=='reject'"></div>
+
+                <div *ngIf="currentLeadStatus=='close'"></div>
+
+                <div *ngIf="currentLeadStatus=='price'">
+                    <div class="input-field flex flex-column">
+                        <span class="label mb-2">Assign To<span class="imp">*</span></span>
+                        <select class="w-full assignTo" [(ngModel)]="assignedUser">
+                            <option value="">--Select Assignee--</option>
+                            <option value="{{item?.id}}" *ngFor="let item of assigneeList">{{item?.name | titlecase}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="currentLeadStatus=='invoice'">
+                    <div class="input-field flex flex-column">
+                        <span class="label mb-2">Assign To<span class="imp">*</span></span>
+                        <select class="w-full assignTo" [(ngModel)]="assignedUser">
+                            <option value="">--Select Assignee--</option>
+                            <option value="{{item?.id}}" *ngFor="let item of assigneeList">{{(item?.id==excelModelVal.userId?'self':item?.name) | titlecase}}</option>
+                        </select>
+                    </div>
+                    <div class="input-field flex flex-column">
+                        <span class="label mb-2">Plan Name<span class="imp">*</span></span>
+                        <input type="text" class="planname" pInputText [(ngModel)]="planName" />
+                    </div>
+                    <div class="input-field flex flex-column">
+                        <span class="label mb-2">Plan Price<span class="imp">*</span></span>
+                        <input type="text" class="planprice" pInputText [(ngModel)]="planPrice" />
+                    </div>
+                    <div class="input-field flex flex-column">
+                        <span class="label mb-2">GST Number</span>
+                        <input type="text" [(ngModel)]="gstNum" pInputText />
+                    </div>
+                </div>
+
+                <div class="input-field flex flex-column">
+                    <span class="label">{{currentLeadStatus=='price' ?'Suggestion' :'Remark'}}<span class="imp">*</span></span>
+                    <textarea rows="3" class="w-full remarkBox" pInputTextarea [autoResize]="false" [(ngModel)]="updatedRemark"></textarea>
+                </div>
+
+                <button *ngIf="currentLeadStatus!=currentLeadPage" pButton pRipple [label]="isSubmitClicked?'Submitting...':'Submit'" [disabled]="isSubmitClicked" class="p-button-success" (click)="onSubmitLead()"></button>
+                <button *ngIf="currentLeadStatus==currentLeadPage" pButton pRipple [label]="isSubmitClicked?'Updating...':'Update'" class="p-button-danger" (click)="onUpdateLead()"></button>
+            </div>
+        </div>
+    </section>
+</div>
+

@@ -1,0 +1,28 @@
+<div class="shared-container h-screen w-full bg-white {{onClickPrint?'sharedHide':''}}">
+    <header class="header-container h-1">
+        <app-header></app-header>
+    </header>
+
+    <div class="body-container flex w-full h-11">
+        <aside class="sidebar h-full relative {{isToggleClicked ?'toLeft':'w-2'}}">
+            <app-sidebar></app-sidebar>
+        </aside>
+        
+        <main class="relative main-body h-full {{isToggleClicked ?'w-full':'w-10'}}">
+            <div class="toggle-key absolute" (click)="onClickToggle()"><i class="pi pi-angle-{{isToggleClicked ? 'right': 'left'}}"></i></div>
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>
+
+<div class="pritable-area" *ngIf="onClickPrint">
+    <app-pdf-template 
+        [invoiceData]="pdfDocData" 
+        [isProformaInvoice]="isProformaInvoice" 
+        [isStampRequired]="pdfDocData.isStampRequired"
+        [isUserFromDelhi]="isUserFromDelhi"
+        [isUserDetailsRemoved]="pdfDocData.isUserDetailsRemoved"
+        [isCashMemo]="isCashMemo">
+    </app-pdf-template>
+</div>
+

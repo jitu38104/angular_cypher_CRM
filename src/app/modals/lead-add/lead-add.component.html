@@ -1,0 +1,102 @@
+<div class="lead-add-container w-full h-full flex justify-content-center align-items-center">
+    <div class="form-container w-9">
+        <h3 class="text-center">Add Lead</h3>
+
+        <div class="form-box px-2 flex flex-column h-10 overflow-auto">
+            <span class="p-float-label relative">
+                <input class="w-full" [(ngModel)]="addLeadValues.username" type="text" id="username1" pInputText />
+                <!-- <span class="impInp">*</span> -->
+                <label htmlFor="username1">Client Name</label>
+                <div id="username" class="error">*Client name is required!</div>
+            </span>
+
+            <span class="p-float-label relative">
+                <input class="w-full" [(ngModel)]="addLeadValues.company" type="text" id="Comapany1" pInputText />
+                <label htmlFor="Comapany1">Company Name <span class="impInp">*</span></label>
+                <div id="company" class="error">*Company name is required!</div>
+            </span>
+
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.designation" type="text" id="Designation" pInputText />
+                <label htmlFor="Designation">Designation</label>
+            </span>
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.department" type="text" id="Department" pInputText />
+                <label htmlFor="Department">Department</label>
+            </span>
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.address" type="text" id="Address" pInputText />
+                <label htmlFor="Address">Address</label>
+            </span>
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.location" type="text" id="Location" pInputText />
+                <label htmlFor="Location">Location</label>
+            </span>
+            <span class="p-float-label relative">
+                <input class="w-full" [(ngModel)]="addLeadValues.email" type="email" id="Email1" pInputText />
+                <!-- <span class="impInp">*</span> -->
+                <label htmlFor="Email1">Email</label>
+                <div id="email" class="error">*Email is required!</div>
+            </span>
+
+            <span class="p-float-label relative">
+                <input class="w-full" [(ngModel)]="addLeadValues.contact" type="text" id="Contact1" pInputText />
+                <!-- <span class="impInp">*</span> -->
+                <label htmlFor="Contact1">Contact</label>
+                <div id="contact" class="error">*Contact is required!</div>
+            </span>
+
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.gst" type="text" id="GST" pInputText />
+                <label htmlFor="GST">GST Number</label>
+            </span>
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.pan" type="text" id="PAN" pInputText />
+                <label htmlFor="PAN">PAN Number</label>
+            </span>
+            <span class="p-float-label">
+                <input class="w-full" [(ngModel)]="addLeadValues.iec" type="text" id="IEC" pInputText />
+                <label htmlFor="IEC">IEC Number</label>
+            </span>
+            <span class="p-float-label">
+                <select [(ngModel)]="addLeadValues.source">
+                    <option value="">--Select Source--</option>
+                    <option value="{{item}}" *ngFor="let item of sourceList">{{item | titlecase}}</option>
+                </select>
+                <div id="source" class="error">*Source is required!</div>
+            </span>
+            <div class="reference-box" *ngIf="addLeadValues.source=='reference'">
+                <span class="p-float-label">
+                    <input class="w-full" [(ngModel)]="addLeadValues.reference.company" type="text" id="PAN" pInputText />
+                    <label htmlFor="PAN">Reference Company<span class="impInp">*</span></label>
+                    <div id="referCompany" class="error">*Company is required!</div>
+                </span>
+                <span class="p-float-label">
+                    <input class="w-full" [(ngModel)]="addLeadValues.reference.name" type="text" id="PAN" pInputText />
+                    <label htmlFor="PAN">Reference Name<span class="impInp">*</span></label>
+                    <div id="referClient" class="error">*Name is required!</div>
+                </span>
+                <span class="p-float-label">
+                    <input class="w-full" [(ngModel)]="addLeadValues.reference.contact" type="text" id="PAN" pInputText />
+                    <label htmlFor="PAN">Reference Contact</label>
+                </span>
+                <span class="p-float-label">
+                    <input class="w-full" [(ngModel)]="addLeadValues.reference.designation" type="text" id="PAN" pInputText />
+                    <label htmlFor="PAN">Reference Designation</label>
+                </span>
+            </div>
+            <span class="p-float-label relative">
+                <textarea  rows="5" class="w-full" [(ngModel)]="addLeadValues.remark" pInputTextarea></textarea>
+                <!-- <span class="impInp">*</span> -->
+                <label for="float-input">Remark</label>
+                <div id="remark" class="error">*Source is required!</div>
+            </span>
+        </div>
+
+        <div class="submit-btn text-center">
+            <button pButton pRipple label="{{isBtnClicked ?'Submitting...':'Submit'}}" (click)="onSubmit()" [disabled]="isBtnClicked" class="p-button-success mr-2 "></button>
+            <button pButton pRipple label="Cancel" (click)="onDismissModal()" class="p-button-danger"></button>
+        </div>
+    </div>
+</div>
+  

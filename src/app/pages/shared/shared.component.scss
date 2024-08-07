@@ -1,0 +1,34 @@
+div.pritable-area{display: none;}
+div.shared-container{
+    div.body-container{
+        aside {
+            transform-origin: left;
+            transition: all 0.3s ease-in-out;
+        }
+
+        main{                       
+            div.toggle-key{
+                top: 0%;
+                left: 0%;
+                z-index: 999;
+                cursor: pointer;
+                padding: 5px 10px;
+                background: #212121;
+                border-bottom-right-radius: 10px;
+                i{color: white;}
+            }
+        }
+    }
+}
+
+.toLeft{
+    width: 0% !important;
+    overflow: hidden;
+}
+
+
+@media print{
+    div.sharedHide{display: none;}
+    div.pritable-area{display: block;}
+}
+

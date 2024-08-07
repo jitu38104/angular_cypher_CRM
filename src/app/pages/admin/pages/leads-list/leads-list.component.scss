@@ -1,0 +1,55 @@
+div.leads-container{
+    div.header-box{
+        padding-left: 3%;
+        height: 7%;
+        background-color: #fafafa;
+        div.user-list{
+            i{font-size: 15px;font-weight: 800;}
+            select{
+                outline: none;
+                padding: 4px 25px;
+                font-size: 15px;
+                border: 1px solid #c2c2c2;
+                border-radius: 5px;
+                color: #495057;
+                &:hover{border-color: #3B82F6;}
+                &:focus{
+                    outline: 0 none;
+                    outline-offset: 0;
+                    box-shadow: 0 0 0 0.2rem #BFDBFE;
+                    border-color: #3B82F6;
+                }
+            }
+        }
+        div.date-box{
+            div.from, div.to{
+                label{
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+                input{
+                    padding: 4px 10px;
+                    font-size: 15px;
+                    user-select: none;
+                }
+            }
+        }
+        button{
+            &:first-child{
+                padding: 3px 10px;
+                padding-left: 20px;
+                border-radius: 0;
+                clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
+            }
+            padding: 7px 12px;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+            i{font-size: 16px;}
+        }
+    }
+
+    div.grid-box{
+        height: 92%;
+    }
+}
+

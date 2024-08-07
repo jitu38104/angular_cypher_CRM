@@ -1,0 +1,87 @@
+<div class="web-leads-container h-full">
+    <div class="header flex align-items-center">
+        <div class="mr-4 flex align-items-center justify-content-between">
+            <button pButton pRipple label="Back" class="p-button-danger back-btn" routerLink="/admin"></button>
+            <button pButton pRipple class="p-button-danger mr-2 refresh" (click)="getAllScheduleDemoLeads()">Refresh <i class="pi pi-refresh"></i></button>
+        </div>
+        <h3 class="text-center m-0">Website Leads</h3>
+        <div class="total-leads text-end flex align-items-center justify-content-between">
+            <div class="multi-select relative mr-3 surface-ground flex align-items-center pointer-events-{{assignedUserId!=''?'none':'auto'}}">
+                <div (click)="onClickAssign()" class="flex align-items-center">
+                    <div class="indicator {{isAssignToActive?'active':''}}"></div>
+                    <span class="select-none">Assign To</span>
+                </div>
+                <div class="side-icon {{isAssignToActive?'active':''}}"><i class="pi pi-angle-{{showAssignee?'up':'down'}}" (click)="showAssignee=!showAssignee"></i></div>
+
+                <div class="drop-list absolute text-center" *ngIf="showAssignee">
+                    <div class="list-item" *ngFor="let item of allUsersList" (click)="getPopUp(item, true)">
+                        <div *ngIf="assignedUserId!=item?.id" class="item w-full {{assignedUserId!=''?'opacity-50':''}}">{{item?.name | titlecase}}</div>
+                        <div *ngIf="assignedUserId==item?.id" class="item w-full"><img src="assets/images/assign-loader.gif" alt=""/></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="total-len">Total: {{scheduleDemoArr.length}}</div>
+        </div>
+    </div>
+
+    <div class="table-box px-3 w-full">
+        <div class="table-container h-full w-full">
+            <table class="w-full">
+                <thead class="sticky top-0">
+                    <th *ngIf="isAssignToActive"><input type="checkbox" [checked]="isSelectAll" (click)="toggleSelectAll($event)" /></th>
+                    <th>Status</th>
+                    <th>Submitted On</th>
+                    <th>Scheduled Date & Time</th>
+                    <th>Company</th>
+                    <th>Client Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Requirement</th>
+                    <th>Lead Source</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of scheduleDemoArr">
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}" *ngIf="isAssignToActive">
+                            <div class="left flex align-items-center justify-content-center" *ngIf="!item?.is_assigned"><input type="checkbox" (click)="onSingleSelect(item)" [checked]="isSelectAll" /></div>
+                        </td>
+                        <td class="flex justify-content-center {{item?.is_assigned ?'bg-teal-100': ''}}">
+                            <div pTooltip="{{!item?.is_assigned?'Unassigned':'Already Assigned'}} Lead" class="right flex align-items-center justify-content-center bg-{{item?.is_assigned?'green':'red'}}-400">
+                                <i class="fa-solid fa-{{item?.is_assigned ?'a':'u'}}"></i>
+                            </div>
+                        </td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{item?.transaction_time==null ? 'N/A' :item?.transaction_time | date:'dd/MM/yyyy'}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}" class="text-start">{{item?.schedule_date | date:'dd/MM/yyyy'}}&nbsp;~&nbsp;{{item?.schedule_time==''?'N/A':item?.schedule_time}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{item?.company_name | uppercase}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{item?.user_name | uppercase}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{item?.email | uppercase}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{item?.phone}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{item?.description | titlecase}}</td>
+                        <td class="{{item?.is_assigned ?'bg-teal-100': ''}}">{{['',null].includes(item?.source) ? 'N/A' : item?.source | uppercase}}</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <div class="spinner w-full" *ngIf="scheduleDemoArr.length==0">
+                <div *ngIf="isApiInProcess" class="spinner-icon flex flex-column justify-content-center align-items-center">
+                    <i class="pi pi-spin pi-spinner mb-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div *ngIf="!isApiInProcess" class="empty-data flex justify-content-center align-items-center">No Lead Available</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<p-dialog id="dialog1" [(visible)]="visibleDialogue5" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '30vw', height: '20vh'}">
+    <div class="content">
+        <p class="text-center">Do you agree to assign the selected leads?</p>
+        <div class="btns flex justify-content-center align-items-center">
+            <button pButton pRipple [label]="'Yes, I agree!'" class="p-button-success mr-2" (click)="getPopUp('', false)"></button>
+            <button pButton pRipple label="Cancel" (click)="visibleDialogue5=false" class="p-button-danger"></button>
+        </div>
+    </div>
+</p-dialog>
+

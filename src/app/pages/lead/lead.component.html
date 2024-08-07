@@ -1,0 +1,172 @@
+<div class="lead-container w-full h-full">
+    <div *ngIf="isHomePage" class="lead-bar surface-50 w-full flex align-items-center">
+        <app-leadbar [stage]="currentStage" (callBack)="onFilterLead($event)" [leadList]="leadList" class="w-full"></app-leadbar>
+    </div>
+
+    <div class="lead-main w-full px-4 relative {{!isHomePage?'h-full':''}}">
+        <div class="container-box w-full h-full">
+            <div class="right-btns absolute">
+                <button *ngIf="isHomePage" (click)="refreshPage()" pButton pRipple class="p-button-danger mr-2 ">Refresh <i class="pi pi-refresh"></i></button>
+                <button *ngIf="currentStage=='invoice'" pButton pRipple class="addPi p-button-success mr-2" (click)="openAddPInvoice()"><i class="fa-sharp fa-solid fa-plus mr-1"></i>Add PI</button>
+                <!-- 'reject','status','invoice','tax' -->
+                <select id="sourceId" (change)="onChangeSource($event, 'source')" *ngIf="['open','follow-up'].includes(currentStage)" class="mr-2">
+                    <option value="">--Select Source--</option>
+                    <option value="{{item}}" *ngFor="let item of sourceList">{{item | titlecase}}</option>
+                </select>
+                <select id="sourceId2" (change)="onChangeSource($event, 'remark')" *ngIf="['open','follow-up'].includes(currentStage)">
+                    <option value="">--Select Remark--</option>
+                    <option value="{{item}}" *ngFor="let item of remarkList">{{item | titlecase}}</option>
+                </select>
+                <select id="sourceId3" (change)="onChangeSource($event, 'tax')" *ngIf="currentStage=='tax'">
+                    <option value="">All Payments</option>
+                    <option value="{{item}}" *ngFor="let item of taxPaymentList">{{item | titlecase}} Payments</option>
+                </select>
+            </div>
+
+            <h1 class="w-full mb-0 flex justify-content-center align-items-center mb-2">{{(currentStage=='open'?'Today Follow-up':currentStage=='follow-up'? 'Next Follow-up': currentStage=='invoice'?'proforma':currentStage) | titlecase}} {{!titleCondition.includes(currentStage)?'Leads':'Invoices'}}</h1>
+            
+            <div class="right-hand-options flex align-items-end absolute right-0">
+                <div *ngIf="isHomePage && currentStage=='open' && isUserAllowedToAssign" class="multi-select relative mr-3 surface-ground flex align-items-center pointer-events-{{assignedUserId!=''?'none':'auto'}}">
+                    <div (click)="onClickAssign()" class="flex align-items-center">
+                        <div class="indicator {{isAssignToActive?'active':''}}"></div>
+                        <span class="select-none">Assign To</span>
+                    </div>
+                    <div class="side-icon {{isAssignToActive?'active':''}}"><i class="pi pi-angle-{{showAssignee?'up':'down'}}" (click)="showAssignee=!showAssignee"></i></div>
+
+                    <div class="drop-list absolute w-full text-center left-0" *ngIf="showAssignee">
+                        <div class="list-item" *ngFor="let item of assigneeList" (click)="onAssignItem(item)">
+                            <div *ngIf="assignedUserId!=item?.id" class="item w-full {{assignedUserId!=''?'opacity-50':''}}">{{item?.name | titlecase}}</div>
+                            <div *ngIf="assignedUserId==item?.id" class="item w-full"><img src="assets/images/assign-loader.gif" alt=""/></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="file-icons mr-2" *ngIf="['tax'].includes(currentStage) && copyLeadList.length>0">
+                    <i class="pi pi-file-excel" (click)="downloadTaxGstExcelFile()" tooltipPosition="left" placement="left" pTooltip="Download GST Excel"></i>
+                </div>
+
+                <div class="total mr-3"><span>Total:</span> {{copyLeadList.length}}</div>
+            </div>
+
+
+
+            <div class="table-container w-full" *ngIf="copyLeadList.length>0">
+                <table class="w-full relative">
+                    <thead class="sticky top-0 z-5">
+                        <th *ngIf="['invoice','tax','status'].includes(currentStage)" class="sticky left-0"></th>
+                        <th *ngIf="isAssignToActive" class="px-2"><input type="checkbox" class="multi-check" (click)="selectAllCheck($event)"  /></th>
+                        <th>S.no.</th>
+                        <th *ngFor="let item of tableHeads" class="text-center">
+                            <div class="title-name w-full flex align-items-center">
+                                <span *ngIf="tableHeadCheckBox.includes(item.key)"><i (click)="copyToClipboard(item.key)" title="Copy selected items" class="pi pi-copy"></i></span>
+                                <span class="w-full">{{item.label}}</span>
+                            </div>
+                        </th>
+                        <th class="sticky right-0 text-center" *ngIf="isHomePage && !conditionalStages.includes(currentStage)">{{currentStage=='reject'? 'Restore': (currentStage=='invoice' || currentStage=='tax')? 'Actions': 'Edit'}}</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of copyLeadList;let i=index">
+                            <td *ngIf="['invoice','tax','status'].includes(currentStage)" class="sticky left-0">
+                                <div class="w-full h-full flex align-items-center">
+                                    <i class="fa-solid fa-circle-info" (click)="onClickInfoIcon(item)"></i>
+                                    <div class="ml-3 sign-icon flex align-items-center justify-content-center bg-{{item?.is_closed?'green':'red'}}-400" *ngIf="currentStage=='tax'">
+                                        <i [pTooltip]="item?.is_closed ? 'Closed Lead': 'Under Process'" class="fa-solid fa-{{item?.is_closed ? 'c': 'p'}}"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td *ngIf="isAssignToActive" class="px-2"><input class="multi-check" type="checkbox" [checked]="isSelectedAll" (click)="onSelectSingleLead($event, item)" /></td>
+                            <td class="{{isHighlighted(item)}}">{{(i+1)}}</td>
+                            <td class="{{isHighlighted(item)}} text-start" [pTooltip]="['remarks','updated_remark'].includes(item2.key)?item[item2.key]:''" tooltipPosition="bottom" *ngFor="let item2 of tableHeads">
+                                <!-- {{isFollowedUp(item)}} -->
+                                <div class="flex align-items-center">
+                                    <span class="checked" *ngIf="tableHeadCheckBox.includes(item2.key)"><input class="checkbox-{{item2.key}}" type="checkbox" (click)="onSelectSingleItem($event, item[item2.key], item2.key)"></span>
+                                    <i *ngIf="['contact','email'].includes(item2.key)" [style]="{'visibility': checkInfoAvailability(item[item2.key])?'visible':'hidden'}" class="pi pi-info-circle" (click)="showDialog(item[item2.key], item2.key)"></i>
+                                    <!-- errorTypes.includes(item?.followup_tracker) -->
+                                    <i *ngIf="item2.key=='last_followup'" [style]="{'visibility': doesFollowupExist(item?.followup_tracker)?'visible':'hidden'}" class="pi pi-info-circle" (click)="showDialog(item?.followup_tracker, item2.key)"></i>
+                                    <div *ngIf="item2.key!='status'" class="regular-val">{{ setTableValues(item, item2.key) }}</div>
+                                    <div *ngIf="item2.key=='status'" class="lead-status w-full text-center font-semibold bg-{{getStatusColor(item[item2.key])}}-500">{{ setTableValues(item, item2.key) }}</div>
+                                </div>
+                            </td>
+                            <td class="{{isHighlighted(item)}} sticky right-0 text-center" *ngIf="isHomePage && !conditionalStages.includes(currentStage)">
+                                <i *ngIf="currentStage=='reject'" class="fa-solid fa-reply-all" title="Restore to Open lead" (click)="showDialog2(item)"></i>
+                                <i *ngIf="currentStage=='tax'" class="fa-solid fa-pen-to-square ml-2" (click)="openInvoiceModal(item)" title="Update Status"></i>
+                                <i *ngIf="currentStage=='invoice'" (click)="openInvoiceModal(item)" title="Lead Invoice" class="fa-solid fa-file-invoice"></i>
+                                <i *ngIf="!['reject','close'].includes(currentStage)" (click)="openEditModal(item)" title="Edit Lead" class="fa-solid fa-user-pen"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <div class="pagination-box flex justify-content-center" *ngIf="copyLeadList.length>0">
+                <p-paginator 
+                    (onPageChange)="onPageChange($event)" 
+                    [first]="first" [rows]="rows" 
+                    [totalRecords]="leadList.length" 
+                    [showFirstLastIcon]="true">
+                </p-paginator>
+            </div> -->
+
+            <div class="spinner w-full" *ngIf="copyLeadList.length==0">
+                <div *ngIf="isApiInProcess" class="spinner-icon flex flex-column justify-content-center align-items-center">
+                    <i class="pi pi-spin pi-spinner mb-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div *ngIf="!isApiInProcess" class="empty-data flex justify-content-center align-items-center">No Lead Available</div>
+            </div>
+        </div>
+
+        <p-dialog [(visible)]="visibleDialogue" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '40vw', height: '50vh'}">
+            <ng-template pTemplate="header"><span class="text-xl font-bold text-center w-full">{{popupTitles[tdModalType]}}</span></ng-template>
+            <div class="w-full h-full">
+                <table class="w-full">
+                    <thead *ngIf="tdModalType=='last_followup'"><th>Date</th> <th>Remark</th></thead>
+                    <thead *ngIf="['contact','email'].includes(tdModalType)"><th>S. No.</th> <th>{{tdModalType=='contact'?'Contacts':'Emails'}}</th></thead>
+                    <tbody>
+                        <tr *ngFor="let item of followUpHistory;let i=index">
+                            <td *ngIf="tdModalType=='last_followup'">{{item?.date|date:'MMM d, y, h:mm:ss a'}}</td>
+                            <td *ngIf="tdModalType=='last_followup'">{{item?.remark}}</td>
+                            <td *ngIf="['contact','email'].includes(tdModalType)">{{i+1}}</td>
+                            <td *ngIf="['contact','email'].includes(tdModalType)">{{item | uppercase}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </p-dialog>
+
+        <p-dialog id="dialog1" [(visible)]="visibleDialogue2" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '30vw', height: '20vh'}">
+            <div class="content">
+                <p class="text-center">Are you sure to restore targeted lead?</p>
+                <div class="btns flex justify-content-center align-items-center">
+                    <button pButton pRipple [label]="isButtonClicked ?'Restoring...' : 'Restore'" class="p-button-success mr-2" (click)="restoreLeadToOpen()"></button>
+                    <button pButton pRipple label="Cancel" (click)="visibleDialogue2=false" class="p-button-danger"></button>
+                </div>
+            </div>
+        </p-dialog>
+
+        <p-dialog id="dialog4" [(visible)]="visibleDialogue3" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '40vw', height: '80vh'}">
+            <h1 class="w-full text-center mb-3 pt-4 sticky top-0 bg-white">Lead Info</h1>
+            <div class="w-full px-4 overflow-auto list-box">
+                <!-- singleItemData -->
+                <div class="item flex align-items-center w-full" *ngFor="let item of itemObjKeys">
+                    <div class="item-label w-4">{{getInfoLabels(item)}}</div>
+                    <div class="item-value w-8">
+                        <span *ngIf="['email','contact'].includes(item)"><div class="mb-1" *ngFor="let item of getInfoValues(item, singleItemData[item])">{{item}}</div></span>
+                        <span *ngIf="!['email','contact'].includes(item)">{{getInfoValues(item, singleItemData[item])}}</span>
+                    </div>
+                </div>
+            </div>
+        </p-dialog>
+
+        <p-dialog id="dialog6" [(visible)]="visibleDialogue4" [closable]="false"  [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '35vw', height: '45vh'}">
+            <span class="close absolute cursor-pointer"><i (click)="visibleDialogue4=false" class="pi pi-times"></i></span>
+            <p class="list-head sticky top-0 pt-2">These are the companies that are already exist in the server.</p>
+            <div class="list-container w-full h-10 px-3 pb-3 pt-2 overflow-auto">
+                <ul><li *ngFor="let item of alreadyExistCompanies">
+                    <div><span>{{item?.company}}</span></div>
+                </li></ul>
+            </div>
+        </p-dialog>
+    </div>
+</div>
+
+<textarea class="hidden" id="textareaElem" cols="30" rows="10"></textarea>

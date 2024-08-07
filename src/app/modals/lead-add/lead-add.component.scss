@@ -1,0 +1,62 @@
+div.lead-add-container{
+    div.form-container{
+        height: 90%;
+        h3{margin-bottom: 1.25rem;}
+
+        div.form-box{
+            margin-bottom: 1.5rem;
+            padding-top: 2rem;
+            span{
+                margin-bottom: 2rem;
+                span.impInp{
+                    color: red;
+                    margin-left: 2.5px;
+                }
+                label{}                
+                p{
+                    font-size: 12px;
+                    margin-left: 5px;
+                    color: red;
+                    letter-spacing: 0.4px;
+                }
+                textarea{resize: none;}
+                select{
+                    width: 100%;
+                    padding: 10px 5px;
+                    border-radius: 5px;
+                    outline-color: #609af8;
+                    border: 1px solid #c2c2c2;
+                    &:hover{border-color: #3B82F6;}
+                }
+            }
+            div.reference-box{
+                border: 2px solid #dcdcdc;
+                padding: 2.5%;
+                border-radius: 10px;
+                margin-bottom: 2rem;
+
+                span:last-child{margin-bottom: 0;}
+            }
+        }
+
+        div.submit-btn{
+            button{
+                padding: 5px 20px;
+                letter-spacing: 0.8px;
+            }
+        }
+    }
+}
+
+
+
+@media screen and (max-width:1601px) {
+    div.lead-add-container  div.form-container { height: 75%;}
+}
+@media screen and (max-width:1281px) {
+    div.lead-add-container  div.form-container{margin-top: -4%;}
+}
+@media screen and (max-width:1025px) {
+    div.lead-add-container  div.form-container{margin-top: -6%;}
+}
+

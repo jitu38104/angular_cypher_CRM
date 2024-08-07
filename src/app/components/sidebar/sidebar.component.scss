@@ -1,0 +1,77 @@
+div.aside{
+    user-select: none;
+    div.option-list{
+        div.option{
+            color: white;
+            cursor: pointer;
+            overflow: hidden;
+            font-family: 'Roboto';
+            border-bottom: 1px solid white;
+            div.parent{
+                font-weight: 500;
+                letter-spacing: 0.35px;
+                padding-left: 15%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                &:hover{background-color: #616161;}
+
+                i{margin-right: 10px;}
+            }
+            div.children{
+                max-height: 0rem;
+                overflow: hidden;
+                transition: all 0.4s ease-in-out;             
+                div.child{
+                    font-size: 14.5px;
+                    font-weight: 500;
+                    letter-spacing: 0.45px;
+                    padding: 3.5px 0;
+                    padding-left: 25%;
+                    &:hover{background-color: #616161;}
+                }
+            }
+        }
+    }
+}
+
+.active {max-height: 100rem !important;}
+
+
+@media screen and (max-width:1601px) {
+
+    div.aside {
+        div.option-list {
+            div.option {
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:1281px) {
+    div.aside {
+        div.option-list {
+            div.option {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:1025px) {
+    div.aside {
+        div.option-list {
+            div.option {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:901px) {
+    div.aside div.option-list div.option {
+        font-size: 10px;
+    }
+
+}
+

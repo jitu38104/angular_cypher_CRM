@@ -1,0 +1,75 @@
+span.bold{font-weight: 500;color: black;}
+
+div.particulars{
+    height: 20vh;
+    margin-bottom: 30px;
+    div.headings{
+        border: 1px solid black;
+        div.s-no, div.particular, div.qty,
+        div.rate, div.total{
+            font-size: 12.5px;
+            font-weight: 500;
+            text-align: center;
+            color: black;     
+            border-right: 1px solid black;       
+        }
+        div.total{border-right: 0;}
+    }
+    div.body{
+        border: 1px solid black;
+        border-top: 0;
+        height: 100%;
+        div.s-no, div.particular, div.qty,
+        div.rate, div.total{
+            height: 100%;
+            text-align: center;
+            padding-top: 10px;
+            font-size: 12.5px;
+            border-right: 1px solid black;
+        }
+        div.particular{
+            text-align: start;
+            padding-left: 5px;
+        }
+        div.total{border-right: 0;}
+    }
+}
+
+div.calculated-box{
+    margin: auto; 
+    width: 97%;
+    margin-bottom: 2px;
+    height: 12.5vh;
+    max-height: 20vh;
+    // min-height: 0vh;
+    
+    font-size: 12.5px;
+    border: 1px solid black;
+
+    &>div:not(:last-child){padding: 3px;}
+    &>div{height: 100%;}
+
+    div.bank-details{border-right: 1px solid black;}
+    div.calculation{border-left: 1px solid black;}
+    // div.rupees-in-words{}
+    
+    div.key-value{
+        width: 100%;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        // border-bottom: 1px solid black;
+        &:not(:last-child) {border-bottom: 1px solid black;}
+    
+        div:first-child{
+            font-weight: 500;
+            color: black;
+            width: 60%;
+            height: 100%;
+            border-right: 1px solid black;
+        }
+        div:last-child{width: 40%;}
+    }
+}
+
+

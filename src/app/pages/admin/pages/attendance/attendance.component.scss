@@ -1,0 +1,171 @@
+div.attendance-container{
+    div.header-box{
+        padding-left: 3%;
+        height: 7%;
+        background-color: #fafafa;
+        div.left-options {
+            div.user-list{
+                i{font-size: 15px;font-weight: 800;}
+                select{
+                    outline: none;
+                    padding: 4px 25px;
+                    font-size: 15px;
+                    border: 1px solid #c2c2c2;
+                    border-radius: 5px;
+                    color: #495057;
+                    &:hover{border-color: #3B82F6;}
+                    &:focus{
+                        outline: 0 none;
+                        outline-offset: 0;
+                        box-shadow: 0 0 0 0.2rem #BFDBFE;
+                        border-color: #3B82F6;
+                    }
+                }
+            }
+            div.date-box{
+                div.from, div.to{
+                    label{
+                        font-size: 15px;
+                        font-weight: 500;
+                    }
+                    input{
+                        padding: 4px 10px;
+                        font-size: 15px;
+                        user-select: none;
+                    }
+                }
+            }
+            button{
+                &:first-child{
+                    padding: 3px 10px;
+                    padding-left: 20px;
+                    border-radius: 0;
+                    clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
+                }
+                padding: 7px 12px;
+                letter-spacing: 0.5px;
+                font-size: 14px;
+                i{font-size: 16px;}
+            }
+        }
+        div.right-options {
+            i.pi-file-excel{font-size: 25px; color: green; cursor: pointer;}
+        }
+    }
+
+    div.grid-box{
+        height: 92%;
+        h3{
+            font-weight: 500;
+            font-size: 30px;
+            padding: 10px 0;
+            span.text-center{
+                width: 85%;
+                padding-left: 10%;
+            }
+            div.check{
+                span{
+                    font-size: 15px;
+                    font-weight: 400;
+                    letter-spacing: 0.3px;
+                }
+            }
+        }
+
+        div.table-box{
+            overflow: auto;
+            height: 92%;
+            table{
+                border-collapse: collapse;
+                thead{
+                    th{
+                        background-color: var(--official-color);
+                        text-align: center;
+                        padding: 5px 3px;
+                        color: white;
+                    }
+                }
+                tbody{
+                    tr{
+                        td{
+                            text-align: center;
+                            padding: 5px 3px;
+                            font-weight: 400;
+                            border: 1px solid #c2c2c2;
+                            font-size: 14.5px;
+                            color: black;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:1025px) {
+    div.attendance-container {
+        div.grid-box {
+            h3 {
+                font-weight: 500;
+                margin-top: 10px;
+                padding: 5px 0;
+                span.text-center {
+                    font-size: 24px;
+                    padding-left: 10%;
+                }
+            }
+
+
+            div.table-box {
+                table {
+                    thead {
+                        th {
+                            padding: 4px 3px;
+                            font-size: 13.5px;
+                            letter-spacing: .5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+   
+}
+
+@media screen and (max-width:901px) {
+
+    div.attendance-container {
+        div.grid-box {
+            h3 {
+                span.text-center {
+                    margin-top: 16px;
+                    margin-bottom: -11px;
+                    font-size: 20px;
+                    padding-left: 10%;
+                }
+            }
+
+            div.table-box {
+                table {
+                    thead {
+                        th {
+                            text-align: center;
+                            padding: 2px 2px;
+                            font-size: 13px;
+                        }
+                    }
+
+                    tbody {
+                        tr {
+                            td {
+                                padding: 2px 8px;
+                                font-size: 10.5px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

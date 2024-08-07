@@ -1,0 +1,107 @@
+<div class="web-leads-container h-full">
+    <div class="header flex align-items-center">
+        <div class="mr-4 flex align-items-center justify-content-between">
+            <button pButton pRipple label="Back" class="p-button-danger back-btn" routerLink="/admin"></button>
+            <button pButton pRipple class="p-button-danger mr-2 refresh" (click)="getAllRequestedCompanies()">Refresh <i class="pi pi-refresh"></i></button>
+        </div>
+        <h3 class="text-center m-0">Requested Companies</h3>
+        <div class="total-leads text-end flex align-items-center">       
+            <div class="total-len">Total: {{allRequestedCompanyArr.length}}</div>
+        </div>
+    </div>
+
+    <div class="table-box px-3 w-full">
+        <div class="table-container h-full w-full">
+            <table class="w-full">
+                <thead class="sticky top-0">
+                    <!-- <th *ngIf="isAssignToActive"><input type="checkbox" [checked]="isSelectAll" (click)="toggleSelectAll($event)" /></th> -->
+                    <th>Status</th>
+                    <th>Requested On</th>
+                    <th>Company Name</th>
+                    <th>Requested By</th>
+                    <th>Action</th>
+
+                    <!-- id
+                    company_name
+                    request_datetime
+                    requested_from
+                    status
+                    transaction_time -->
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of allRequestedCompanyArr">
+                        <!-- <td class="{{item?.is_assigned ?'bg-teal-100': ''}}" *ngIf="isAssignToActive">
+                            <div class="left flex align-items-center justify-content-center" *ngIf="!item?.is_assigned"><input type="checkbox" (click)="onSingleSelect(item)" [checked]="isSelectAll" /></div>
+                        </td> -->
+                        <td class="flex justify-content-center {{item?.status ?'bg-teal-100': ''}}">
+                            <div pTooltip="{{!item?.status?'Unresolved':'Resolved'}} Company" class="right flex align-items-center justify-content-center bg-{{item?.status?'green':'red'}}-400">
+                                <i class="fa-solid fa-{{item?.status ?'r':'u'}}"></i>
+                            </div>
+                        </td>
+                        <td class="{{item?.status ?'bg-teal-100': ''}}">{{item?.request_datetime=='' ? 'N/A' : item?.request_datetime | date:'MM/dd/yyyy, hh:mm a'}}</td>
+                        <td class="{{item?.status ?'bg-teal-100': ''}}">{{item?.company_name | uppercase}}</td>
+                        <td class="{{item?.status ?'bg-teal-100': ''}}">{{item?.requestedFrom | uppercase}}</td>
+                        <td class="{{item?.status ?'bg-teal-100': ''}}">
+                            <div class="action-btn flex align-items-center justify-content-center">
+                                <i class="fa-solid {{!item?.status ?'fa-gear': 'fa-pen-to-square'}}" (click)="getPopUp(item)"></i>
+                            </div>
+                        </td>                        
+                    </tr>
+                </tbody>
+            </table>
+    
+            <div class="spinner w-full" *ngIf="allRequestedCompanyArr.length==0">
+                <div *ngIf="isApiInProcess" class="spinner-icon flex flex-column justify-content-center align-items-center">
+                    <i class="pi pi-spin pi-spinner mb-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div *ngIf="!isApiInProcess" class="empty-data flex justify-content-center align-items-center">No Lead Available</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<p-dialog id="dialog1" [(visible)]="visibleDialogue5" [modal]="true" [maximizable]="false" [draggable]="false" [resizable]="false" [style]="{width: '35vw', height: '70vh'}">
+    <div class="header mb-3">{{isPopupInUpdated ? 'Update' : 'Add'}} Company</div>
+    <div class="form-loader absolute w-full h-full flex justify-content-center align-items-center" *ngIf="isFormSubmitting"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+    <div class="content">
+        <div class="input-field">
+            <!-- <span class="imp">*</span> -->
+            <span>Company Name</span>
+            <input type="text" [(ngModel)]="companyDetails.company_name" pInputText />
+        </div>
+        <div class="input-field">
+            <span>IEC Number</span>
+            <input type="text" [(ngModel)]="companyDetails.iec" pInputText />
+        </div>
+        <div class="input-field">
+            <span>Person Name</span>
+            <input type="text" [(ngModel)]="companyDetails.person_name" pInputText />
+        </div>
+        <div class="input-field">
+            <span>Contact Number</span>
+            <input type="text" [(ngModel)]="companyDetails.contact" pInputText />
+        </div>
+        <div class="input-field">
+            <span>Email</span>
+            <input type="email" [(ngModel)]="companyDetails.email" pInputText />
+        </div>
+        <div class="input-field">
+            <span>Location</span>
+            <input type="text" [(ngModel)]="companyDetails.location" pInputText />
+        </div>
+        <div class="input-field">
+            <span>Address</span>
+            <input type="text" [(ngModel)]="companyDetails.address" pInputText />
+        </div>
+
+        <div class="submit-btn">
+            <button pButton pRipple label="Cancel" class="p-button-danger mr-2" (click)="visibleDialogue5=false"></button>
+            <button *ngIf="!isPopupInUpdated" pButton pRipple label="Submit" class="p-button-success" (click)="onSubmitRequestedCompany()"></button>
+            <button *ngIf="isPopupInUpdated" pButton pRipple label="Update" class="p-button-success" (click)="updateCompanyDetails()"></button>
+        </div>
+    </div>
+</p-dialog>
+

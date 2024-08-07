@@ -1,0 +1,231 @@
+div.add-user-container{
+    height: 85.5%;
+    div.header{
+        height: 5%;
+        padding-left: 3%;
+        div.mr-4{
+            width: 6%;
+            button{
+                padding: 5px 15px;
+                letter-spacing: 0.5px;
+                font-size: 15px;
+                border-radius: 0;
+                padding-left: 20px;
+                clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
+            }
+        }
+        h3{
+            padding-top: 3%;
+            width: 80%;
+            font-size: 30px;
+            font-weight: 400;
+            letter-spacing: -0.3px;
+        }
+    }
+
+    div.form-container{
+        height: 95%;
+        div.form{
+            width: 55%;
+            
+            div.input-field{
+                width: 100%;
+                margin-bottom: 14px;
+                input{
+                    width: 100%;
+                    font-size: 15px;
+                    padding: 7px 10px;
+                }
+                input[type=number]::-webkit-inner-spin-button, 
+                input[type=number]::-webkit-outer-spin-button { 
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                    margin: 0; 
+                }
+                select{
+                    width: 100%;
+                    outline: none;
+                    border: 1px solid #c2c2c2;
+                    padding: 7px 25px;
+                    font-size: 15px;
+                    border-radius: 5px;
+                    color: #495057;
+                    &:hover{border-color: #3B82F6;}
+                    &:focus{
+                        outline: 0 none;
+                        outline-offset: 0;
+                        box-shadow: 0 0 0 0.2rem #BFDBFE;
+                        border-color: #3B82F6;
+                    }
+                }
+            }
+
+            div.role-access{                
+                margin-bottom: 2.5rem;
+                div.title h5{
+                    position: relative;
+                    width: fit-content;
+                    &::before,
+                    &::after{
+                        content: "";
+                        position: absolute;
+                        width: 100%;
+                        top: 50%;                        
+                        border-bottom: 1px dashed #c2c2c2;
+                    }
+                    &::after{right: calc(-100% - 5%);}
+                    &::before{left: calc(-100% - 5%);}
+                }
+                div.access{
+                    label{
+                        font-size: 15px;
+                        font-weight: 600;
+                        color: #505050;
+                        letter-spacing: 0.5px;
+                        margin-right: 10px;
+                    }
+                    input{accent-color: red;}
+                }
+            }
+
+            div.submitBtn{
+                button{
+                    padding: 5px 15px;
+                    letter-spacing: 0.5px;
+                    font-size: 15px;
+                    width: 35%;
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:1601px) {
+    div.add-user-container {
+        div.form-container {
+            div.form {
+                div.input-field {
+                    input {
+                        width: 100%;
+                        font-size: 15px;
+                        padding: 5px 10px;
+                    }
+                }
+
+                div.role-access {
+                    div.access {
+                        label {
+                            font-size: 13px;
+                            margin-right: 8px;
+                        }
+                    }
+                }
+
+                div.submitBtn {
+                    button {
+                        padding: 6px 0px;
+                        font-size: 15px;
+                        width: 32%;
+                    }
+                }
+            }
+        }
+
+        div.header {
+            h3 {
+                padding-top: 5%;
+                width: 80%;
+                font-size: 28px;
+            }
+        }
+    }
+
+
+
+}
+
+@media screen and (max-width:1281px) {
+    div.add-user-container {
+        div.header {
+            div.mr-4 button {
+                padding: 4px 12px;
+                letter-spacing: 0.5px;
+                font-size: 14px;
+            }
+        }
+    }
+
+    div.form-container {
+        div.form {
+            width: 65%;
+        }
+
+    }
+
+}
+
+@media screen and (max-width:1025px) {
+    div.add-user-container {
+        div.form-container {
+            div.form {
+                width: 70%;
+
+                div.input-field {
+                    input {
+                        width: 100%;
+                        font-size: 13px;
+                        padding: 1px 10px;
+                    }
+
+                    select {
+                        padding: 4px 25px;
+                        font-size: 13px;
+                    }
+                }
+
+                div.role-access {
+                    div.access label {
+                        font-size: 10.5px;
+                    }
+                }
+
+                div.submitBtn {
+                    button {
+                        padding: 4px 0px;
+                        font-size: 14px;
+                        width: 27%;
+                    }
+                }
+            }
+        }
+
+        div.header {
+            height: 5%;
+            padding-left: 4.3%;
+
+            h3 {
+                padding-top: 9%;
+                width: 80%;
+                font-size: 28px;
+            }
+
+            div.mr-4 {
+                button {
+                    padding: 1px 10px;
+                }
+            }
+        }
+
+        div.header {
+            padding-left: 5.3%;
+
+            h3 {
+                padding-top: 18%;
+                font-size: 24px;
+            }
+        }
+    }
+}
+

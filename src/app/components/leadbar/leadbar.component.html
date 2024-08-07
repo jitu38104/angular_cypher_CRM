@@ -1,0 +1,42 @@
+<div class="leadbar-container w-full px-5 flex align-items-center justify-content-between">
+    <div class="left-btns">
+        <button class="active-shadow bg-green-600 mr-2" (click)="openAddLeadModal()" *ngIf="stage == 'open'">
+            <i class="fa-sharp fa-solid fa-plus mr-1"></i>
+            Add
+        </button>
+        <!-- openFileBrowser(fileInp) -->
+        <button class="active-shadow bg-green-600" (click)="openExcelFileInp()" *ngIf="stage == 'open'">
+            <i class="fa-sharp fa-solid fa-file-import mr-1"></i>
+            Import
+        </button>
+        <input type="file" (change)="onSelectFile($event)" [accept]="acceptExcelFormats" #fileInp class="hidden" />
+
+
+        <!-- for get data datewise in performa and tax invoice -->
+        <span class="flex align-items-center" *ngIf="['tax', 'invoice'].includes(stage)">
+            <div class="date-box flex align-items-center mr-2">
+                <div class="from mr-3">
+                    <label for="fromCal" class="mr-1">From:&nbsp;&nbsp;</label>
+                    <input [(ngModel)]="apiBody.from" id="fromCal" type="date" pInputText onfocus="this.showPicker()" />
+                </div>
+                <div class="to">
+                    <label for="toCal" class="mr-1">To:&nbsp;&nbsp;</label>
+                    <input [(ngModel)]="apiBody.to" id="toCal" type="date" pInputText onfocus="this.showPicker()" />
+                </div>
+            </div>
+            <button pButton pRipple class="p-button-success"><i class="pi pi-search" (click)="sendInvoiceDatesEvent()"></i></button>
+        </span>
+    </div>
+
+    <div class="mid-search flex align-items-center bg-white">
+        <input class="w-full" type="text" [placeholder]="searchPlaceholder" [(ngModel)]="searchInp"  (keyup)="onFilterLeads()" />
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+
+    <div class="right-btns" *ngIf="!conditionalStages.includes(stage)">
+        <select class="w-full" [(ngModel)]="stage" (change)="onChangeStage()">
+            <option [disabled]="item?.id==stage" [value]="item?.id" *ngFor="let item of stages">{{item?.optionName | titlecase}}</option>
+        </select>
+    </div>
+</div>
+<p-toast position="bottom-right"></p-toast>

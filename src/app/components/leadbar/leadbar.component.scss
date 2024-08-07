@@ -1,0 +1,121 @@
+div.leadbar-container{
+    div.left-btns{
+        button.active-shadow {
+            border: 0;
+            padding: 5px 15px;
+            font-size: 17px;
+            cursor: pointer;
+            color: white;
+        }
+
+        div.date-box{
+            div.from, div.to{
+                label{
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+                input{
+                    padding: 4px 10px;
+                    font-size: 15px;
+                    user-select: none;
+                }
+            }
+        }
+        button.p-button-success{
+            &:first-child{
+                padding: 3px 10px;
+                padding-left: 20px;
+                border-radius: 0;
+                clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
+            }
+            padding: 7px 12px;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+            i{font-size: 16px;}
+        }
+    }
+
+    div.mid-search{
+        width: 25%;
+        padding-right: 10px;
+        border: 1px solid #c2c2c2;
+        i {color: #848484;}
+        input{
+            font-size: 16px;
+            outline: none;
+            border: none;
+            padding: 5px 10px;
+        }
+    }
+
+    div.right-btns{
+        width: 12% ;
+        select{
+            font-size: 16px;
+            border: 1px solid #c2c2c2;
+            outline: none;
+            padding: 5px;
+        }
+    }
+}
+
+
+@media screen and (max-width:1601px) {
+    div.leadbar-container {
+        div.left-btns {
+            button {
+                padding: 4px 14px;
+                font-size: 15px;
+            }
+        }
+
+        div.right-btns {
+            select {
+                font-size: 15px;
+            }
+        }
+    }
+
+}
+
+@media screen and (max-width:1281px) {
+    div.leadbar-container {
+        div.mid-search {
+            input {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:1025px) {
+    div.leadbar-container {
+        div.left-btns {
+            button {
+                padding: 3px 12px;
+                font-size: 13px;
+            }
+        }
+
+        div.mid-search {
+            input {
+                font-size: 13.5px;
+                padding: 3px 3px;
+            }
+
+            i {
+                color: #848484;
+                font-size: 13.5px;
+            }
+        }
+
+        div.right-btns {
+            select {
+                font-size: 13px;
+            }
+        }
+    }
+
+}
+

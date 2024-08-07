@@ -1,0 +1,779 @@
+div.invoice-container{
+    background-color: #f1f1ef;
+    header{
+        color: white;
+        padding: 5px 20px;
+        h3{font-size: 22px;}
+        i{font-size: 15px;cursor: pointer;}
+    }
+
+    div.invoice-form{
+        height: 89%;
+        div.form-body{
+            padding: 1rem 1.3rem;
+            height: 100%;
+            overflow: auto;
+            div.order-num{
+                font-size: 15px;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                color: #6b6b6b;
+                text-align: right;
+                font-style: italic;
+            }
+            section.first{
+                margin-bottom: 1.5rem;
+                div.company{
+                    i{
+                        font-size: 22.5px;
+                        margin-right: 8px;
+                    }
+                    i.pi-pencil{
+                        font-size: 13px;
+                        border: 1px solid #6d6d6d;
+                        padding: 5px 5px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        background-color: black;
+                        color: white;
+                        margin-right: 2px;
+                        &:active{background-color: white;color: black;}                    
+                    }
+    
+                    h3{
+                        font-size: 30px;
+                        font-weight: 400;
+                    }
+                }
+    
+                div.inp-form{
+                    input, select{
+                        border: 1px solid #c2c2c2;
+                        padding: 5px 15px;
+                        outline: none;
+                    }
+                    span{
+                        font-size: 12px;
+                        letter-spacing: 0.5px;
+                        font-weight: 500;
+                        z-index: 999;
+                        top: -45%;
+                        color: #6b6b6b;
+                    }
+                    span.all.issued_By{left: 0;}
+                    span.all.username{left: 28%;}
+                    span.all.invoice_No{left: 54%;}
+                    span.all.invoice_Date{left: 80%;}
+
+                    span.not-all.issued_By{left: 0;}
+                    span.not-all.username{left: 38%;}
+                    span.not-all.invoice_Date{left: 72%;}
+                }
+            }
+    
+            section.second{
+                margin-bottom: 2rem;
+                div.billing, div.shipping{
+                    width: 40%;
+                    padding: 10px 25px;
+                    border-radius: 15px;
+                    background-color: white;
+                    box-shadow: 0px 1px 8px 0px #00000047;
+    
+                    div.header{
+                        justify-content: space-between;
+                        margin-bottom: 15px;
+                        span{
+                            font-weight: 500;
+                            color: #999999;
+                        }
+                        div.icons{
+                            i{cursor: pointer;}
+                            i:first-child{
+                                font-size: 18px;
+                                margin-right: 10px;
+                            }
+                        }
+                    }
+    
+                    div.address{
+                        line-height: 25.5px;
+                        font-size: 15.8px;
+                        letter-spacing: 0.3px;
+                    }
+    
+                    div.same-as{
+                        span{font-size: 14px;}
+                    }
+                }
+            }
+    
+            section.third{
+                margin-bottom: 2rem;
+                table{
+                    background-color: white;
+                    border-collapse: collapse;
+                    box-shadow: 0px 1px 8px 0px #00000047;
+                    th{text-align: center;}
+                    td,th{border: 1px solid darkgray; padding: 2px 3px;}
+                    td:not(:nth-child(2)){text-align: center;}
+                    td.icon{cursor: pointer;}
+    
+                    td{
+                        div{
+                            h4{
+                                font-size: 20px;
+                                font-weight: 500;
+                                color: #616161;
+                            }
+                            span{font-size: 15px;}
+                        }
+                    }
+                }
+            }
+    
+            section.forth{
+                margin-bottom: 2rem;
+                div.bank-details{
+                    width: 35%;
+                    background-color: white;
+                    line-height: 30px;
+                    padding: 10px 20px;
+                    border-radius: 15px;
+                    box-shadow: 0px 1px 8px 0px #00000047;
+                    div.header {
+                        margin-bottom: 10px;
+                        span{font-weight: 500;}
+                        i{cursor: pointer;}
+                    }
+                    div.bank-desc{
+                        div.data{
+                            display: flex;
+                            justify-content: space-between;
+                            span:first-child{}
+                            span:last-child{}
+                        }
+                    }
+                }
+    
+                div.total{
+                    width: 40%;
+                    border-radius: 15px;
+                    line-height: 35px;
+                    padding: 10px 30px;
+                    background-color: white;
+                    box-shadow: 0px 1px 8px 0px #00000047;
+                    div.data{
+                        display: flex;
+                        justify-content: space-between;
+                        span:first-child{}
+                        span:last-child{}
+                    }
+                    div.grand {
+                        border-top: 1px solid #c2c2c2;
+                        span:first-child{font-weight: 500;}
+                    }
+                }
+            }
+    
+            section.fifth{
+                div.pi-status{
+                    span{font-weight: 500;}
+                    select{
+                        padding: 2px 15px;
+                        border: 1px solid #c2c2c2;
+                        font-size: 15px;
+                        font-weight: 500;
+                        letter-spacing: 0.7px;
+                        margin-left: 10px;
+                        outline: none;
+                    }
+                }
+                div.check-fields{
+                    span{font-weight: 500;}
+    
+                    div.radios{
+                        div.radio{
+                            p-radioButton{scale: 0.8;}
+                            label{font-size: 15px;}
+                        }
+                    }
+                }
+    
+                div.attachment{
+                    span{font-weight: 500;}
+                    div.flex.gap-1{
+                        p-checkbox{scale: 0.8;}
+                        label{
+                            font-size: 15px;
+                            letter-spacing: 0.5px;
+                            font-weight: 500;
+                            color: #3d3d3d;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    div.submit-btn{
+        padding: 5px 15px;
+        div.check-box{
+            input[type="checkbox"]{scale: 0.95;}
+            span{font-size: 15px; font-weight: 400;}
+        }
+        button{
+            padding: 5px 15px;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    div.add-pi{
+        width: 100%;
+        margin-top: -5%;
+        div.center-box{
+            h3{
+                text-align: center;
+                font-size: 30px;
+                font-weight: 400;
+            }
+            div.dropdown{
+                align-items: center;
+                border: 1px solid #c2c2c2;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                width: 30%;
+                margin: auto;
+                background-color: white;
+                span{
+                    font-size: 17px;
+                    letter-spacing: 0.5px;
+                    color: #413f3f;
+                }
+                i{font-size: 14px;}
+            }
+            div.submit button{padding: 5px 0; width: 12%;}
+        }
+    }
+}
+
+div.loading-screen{
+    height: 95%;
+    background-color: #00000059;
+    div.loading{
+        i{font-size: 2.2rem;color: white;}
+        span{
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: white;
+        }
+    }
+}
+
+
+
+p-dialog{
+    div.popup-container{
+        input{color: #484848;}
+        h3{
+            font-weight: 400;
+            padding: 2% 0;
+        }
+
+        div.btn-box{
+            padding: 10px 0;
+            button{
+                padding: 5px 15px;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        section.first{
+            div.as-same{
+                input{margin-right: 5px;}
+                span{font-size: 14px;}
+            }
+
+            div.fieldset{
+                border: 1px solid #c2c2c2;
+                position: relative;
+                padding: 2rem 1rem;
+                padding-top: 2.5rem;
+                div.legend{
+                    font-size: 18px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    word-spacing: 5px;
+                    position: absolute;
+                    z-index: 99;
+                    top: -7%;
+                    left: 1%;
+                    background-color: white;
+                    padding: 0 15px;
+                }
+                div.form-box{
+                    span{
+                        &:first-child{margin-bottom: 1.5rem;}
+                        input{
+                            width: 100%;
+                            border-radius: 0;
+                            padding: 10px;
+                        }
+                    }
+                }
+            }
+
+            div.email-drop{
+                select {
+                    border: 1px solid #d5d5d5;
+                    padding: 7px 5px;
+                    font-size: 16px;
+                    outline: none;
+                }
+                input{ padding: 5px 10px; border-radius: 0; }
+            }
+        }
+
+        section.second{
+            padding: 0 10%;
+            select{
+                border: 1px solid #c2c2c2;
+                padding: 8px 25px;
+                width: 100%;
+                outline: none;
+            }
+
+            div.input-box{
+                div.input-fields{
+                    display: flex;
+                    align-items: center;
+                    span{
+                        font-size: 17px;
+                        font-weight: 500;
+                        width: 25%;
+                    }
+                    input{
+                        width: 75%;
+                        border: 1px solid #c2c2c2;
+                        padding: 5px 10px;
+                        outline: none;
+                    }
+                }
+            }
+        }
+
+        section.third{
+            padding: 0 10%;
+            div.input-fields{
+                display: flex;
+                align-items: flex-end;
+                span{
+                    font-size: 17px;
+                    font-weight: 500;
+                    width: 25%;
+                }
+                input{
+                    border: 1px solid #c2c2c2;
+                    width: 75%;
+                    outline: none;
+                    padding: 5px 15px;
+                }
+            }
+        }
+    }
+
+    div.edit-box{
+        width: 80%;
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        input{
+            border: 1px solid #c2c2c2;
+            padding: 5px 10px;
+            outline: none;
+        }
+        button{
+            padding: 5px 15px;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    div.content{
+        p{
+            font-size: 22px;
+            font-weight: 400;
+            font-family: 'Roboto';
+            margin-top: 10%;
+            margin-bottom: 5%;
+        }
+        div.btns{
+            button{
+                padding: 5px 20px;
+                letter-spacing: 0.8px;
+            }
+        }
+    }
+}
+
+p-dialog#dialog3{
+    div.dropdown-box{
+        height: 100%;
+        padding-top: 15%;
+        input{
+            border: 1px solid #c2c2c2;
+            width: 100%;
+            padding: 5px 10px;
+            outline: none;
+            font-size: 15px;
+        }
+        div.drop-options{
+            width: 100%;
+            height: 85%;
+            margin-top: 3.5%;
+            overflow: auto;
+            border: 1px solid #e5e4e4;
+            div.option{
+                font-size: 15px;
+                cursor: pointer;
+                padding: 5px 10px;
+                letter-spacing: 0.8px;
+                border-bottom: 1px dotted #c2c2c2;
+                &:hover{
+                    background-color: #eeeeee;
+                    border-bottom-color: #eeeeee;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+@media screen and (max-width:1281px) {
+    div.invoice-container {
+        div.invoice-form {
+            div.form-body {
+                section.first {
+                    div.company {
+                        h3 {
+                            font-size: 25px;
+                        }
+                    }
+
+                    div.inp-form {
+                        select {
+                            padding: 5px 7px;
+                        }
+
+                        span.not-all.username {
+                            left: 28%;
+                        }
+
+                        span.not-all.invoice_Date {
+                            left: 69%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+   
+}
+
+@media screen and (max-width:1025px) {
+    div.invoice-container {
+        div.invoice-form {
+            div.form-body {
+                section.first {
+                    div.company {
+                        h3 {
+                            font-size: 19px;
+                        }
+
+                        i {
+                            font-size: 18.5px;
+                            margin-right: 3px;
+                        }
+
+                        i.pi-pencil {
+                            font-size: 11px;
+                        }
+                    }
+
+                    div.inp-form {
+
+                        input,
+                        select {
+                            padding: 4px 12px;
+                            font-size: 14px;
+                        }
+
+                        span.not-all.username {
+                            left: 31%;
+                        }
+
+                        span.not-all.invoice_Date {
+                            left: 70%;
+                        }
+                    }
+                }
+
+                section.third {
+                    table {
+                        td {
+                            div {
+                                h4 {
+                                    font-size: 15px;
+                                    margin-bottom: 2px;
+                                }
+                            }
+                        }
+
+                        td,
+                        th {
+                            font-size: 14px;
+                            padding: 1px 3px;
+                        }
+
+                        td:not(:nth-child(2)) {
+                            font-size: 13px;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                section.forth {
+                    div.total {
+                        div.data {
+                            font-size: 14px;
+                        }
+                    }
+
+                    div.bank-details {
+                        width: 40%;
+                        font-size: 14px;
+                    }
+
+                    div.bank-desc {
+                        div.data {
+                            font-size: 11.5px;
+                            line-height: 23px;
+                        }
+                    }
+                }
+
+                section.fifth {
+                    div.pi-status {
+                        select {
+                            font-size: 13px;
+                            padding: 2px 15px;
+                        }
+
+                        span {
+                            font-size: 14px;
+                        }
+                    }
+
+                    div.check-fields {
+                        span {
+                            font-weight: 500;
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        div.submit-btn {
+            button {
+                padding: 3px 12px;
+                letter-spacing: 0.5px;
+                font-size: 13px;
+            }
+        }
+    }
+
+    div.invoice-container div.invoice-form div.form-body section.second div.billing div.address,
+    div.invoice-container div.invoice-form div.form-body section.second div.shipping div.address {
+        line-height: 25.5px;
+        font-size: 13.5px;
+        margin-top: -8px;
+    }
+
+}
+
+@media screen and (max-width:901px) {
+    div.invoice-container div.invoice-form div.form-body section.first div.inp-form span.not-all.username {
+        top: -53%;
+        left: 31%;
+    }
+
+    div.invoice-container {
+        header h3 {
+            font-size: 17px;
+            margin-top: 5px;
+        }
+
+        div.invoice-form {
+            div.form-body {
+                div.order-num {
+                    font-size: 12px;
+                }
+
+                section.first {
+                    div.company {
+                        h3 {
+                            font-size: 12px;
+                        }
+
+                        i {
+                            font-size: 15.5px;
+                        }
+
+                        i.pi-pencil {
+                            font-size: 7px;
+                        }
+                    }
+
+                    div.inp-form {
+
+                        input,
+                        select {
+                            padding: 3px 6px;
+                            font-size: 12px;
+                        }
+
+                        span.not-all.issued_By {
+                            left: 0;
+                            top: -55%;
+                        }
+
+                        span.not-all.username {
+                            top: -53%;
+                            left: 31%;
+                        }
+
+                        span.not-all.invoice_Date {
+                            left: 70%;
+                            top: -55%;
+                        }
+                    }
+                }
+
+                section.second {
+
+                    div.billing,
+                    div.shipping {
+                        padding: 3px 4px;
+
+                        div.address {
+                            line-height: 20.5px;
+                            font-size: 11px;
+                            margin-top: -13px;
+                        }
+
+                        div.header {
+
+                            span {
+                                font-size: 13px;
+                                margin-top: 4px;
+                            }
+
+                            div.icons {
+                                i:first-child {
+                                    font-size: 12px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                section.forth {
+                    div.bank-details {
+                        font-size: 14px;
+                        padding: 0px 8px;
+
+                        div.header {
+                            margin-bottom: 2px;
+                        }
+                    }
+
+                    div.bank-desc {
+                        div.data {
+                            font-size: 11px;
+                            line-height: 23px;
+                        }
+                    }
+
+                    div.total {
+                        div.data {
+                            line-height: 26px;
+                            font-size: 11px;
+                        }
+                    }
+                }
+
+                section.fifth {
+                    div.pi-status {
+                        span {
+                            font-size: 11px;
+                        }
+
+                        select {
+                            font-size: 10.6px;
+                            padding: 2px 4px;
+                        }
+                    }
+
+                    div.check-fields {
+                        span {
+                            font-size: 11.2px;
+                        }
+
+                        div.radios {
+                            div.radio {
+                                label {
+                                    font-size: 12px;
+                                }
+                            }
+                        }
+
+                    }
+
+                    div.attachment {
+                        div.flex.gap-1 {
+                            label {
+                                font-size: 12px;
+
+                            }
+                        }
+
+                        span {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+
+        div.submit-btn {
+            button {
+                padding: 2px 8px;
+                font-size: 11px;
+            }
+        }
+    }
+}
+
+
+
+
+

@@ -1,0 +1,307 @@
+create table crm_openleads(
+	id serial primary key not null,
+    company_name varchar(500),
+	name varchar(100),
+	designation varchar(150),
+	department varchar(150),
+	address text,
+	contact text,
+	email text,
+	location varchar(100),
+	gst_num varchar(100),
+	pan_num varchar(100),
+	iec_num varchar(100),
+	remarks text,
+
+	last_followup timestamp, --null
+	next_followup timestamp, --null
+	assigned_from integer, --null
+	user_id integer,
+	current_stage varchar(100),
+	transaction_time timestamp,
+	lead_tracker text,	--will be active when assigning
+	followup_tracker text, --will be active when following up
+	active boolean
+);
+
+
+
+
+
+
+
+ALTER TABLE crm_openleads
+  DROP COLUMN phone_num;
+
+
+ALTER TABLE crm_openleads
+ADD COLUMN iec_num varchar(100);
+
+
+create table "crm_statusleads"(
+	id serial primary key not null,
+	lead_data text,
+	assigners varchar(200),
+	status varchar(100),
+	transaction_time timestamptz,
+	active boolean
+)
+
+
+truncate crm_openleads;
+truncate crm_closeleads;
+truncate crm_followupleads;
+truncate crm_demoleads;
+truncate crm_priceleads;
+truncate crm_rejectleads;
+truncate crm_statusleads;
+truncate crm_invoiceleads;
+truncate "crm_masterLeads";
+
+
+
+
+        // const filteredCsvRecords = csvRecords.filter((item:any) => !this.existingEmails.includes(item["email"]));
+
+        // if(filteredCsvRecords.length==0) {
+        //   this.utility.showToastMsg("error", "Exist Email", "All emails are already exist!");
+        //   return;
+        // }
+
+
+
+
+		
+    // const userId = this.utility.fetchUserSingleDetail("id");
+    // this.apiService.getAllUsersAPI(userId).subscribe({
+    //   next: (res: any) => {
+    //     if (!res.error) {
+    //       (res?.result).map((item: any) => { if (item.id == userId) item.name = "self"; });
+    //       this.assigneeList = res?.result;
+    //       this.assigneeList.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+    //     }
+    //   }, error: (err: any) => { console.log(err); }
+    // });
+
+
+
+
+
+
+
+<!-- <div class="grid-box w-full">
+        <h3 class="w-full flex align-items-center">
+            <span class="text-center">{{getCurrentStatus(choosenStatus)}} Leads</span>
+        </h3>
+        <div class="table-box w-11 mx-auto">
+            <table class="w-full">
+                <thead>
+                    <th>S. No.</th>
+                    <th *ngFor="let item of tableHeads">{{item?.label}}</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> -->
+
+
+        // h3{
+        //     font-weight: 500;
+        //     font-size: 30px;
+        //     padding: 10px 0;
+        //     span.text-center{
+        //         width: 85%;
+        //         padding-left: 10%;
+        //     }
+        // }
+
+        // div.table-box{
+        //     overflow: auto;
+        //     height: 92%;
+        //     table{
+        //         border-collapse: collapse;
+        //         thead{
+        //             th{
+        //                 background-color: var(--official-color);
+        //                 text-align: center;
+        //                 padding: 5px 3px;
+        //                 color: white;
+        //             }
+        //         }
+        //         tbody{
+        //             tr{
+        //                 td{
+        //                     text-align: center;
+        //                     padding: 5px 3px;
+        //                     font-weight: 400;
+        //                     border: 1px solid #c2c2c2;
+        //                     font-size: 14.5px;
+        //                     color: black;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  csv parser service >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+import { Injectable } from '@angular/core';
+import { UtilitiesService } from './utilities.service';
+import { CSVModel } from 'src/app/modals/models/excelModel';
+import { DatePipe } from '@angular/common';
+import { WorkBook, WorkSheet, read, utils } from 'xlsx';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CsvParserService {
+
+  constructor(
+    private utility: UtilitiesService,
+    private datePipe: DatePipe
+  ) { }
+
+  convertIntoJson(fileInp: any, callback: Function) {
+    try {
+      if (!fileInp.files[0].name.endsWith(".csv")) callback("CSV file is required!", undefined);
+
+      const reader:FileReader = new FileReader();
+      // reader.readAsText(fileInp.files[0]);
+
+      reader.onload = async(e: any) => {
+        /* read workbook */
+        const ab:ArrayBuffer =  await e.target.result;
+        const wb:WorkBook = await read(ab);
+  
+        /* grab first sheet */
+        const wsname:string = wb.SheetNames[0];
+        const ws:WorkSheet = wb.Sheets[wsname];
+  
+        /* save data */
+        const csvRecordsArray = (utils.sheet_to_json(ws, {header: 1}));
+        const headersRow:any = csvRecordsArray[0];
+        const records = await this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
+        callback(undefined, records);
+      };
+      reader.readAsArrayBuffer(fileInp.files[0]);
+
+
+      // reader.onload = async() => {
+      //   const csvData = reader.result;
+      //   const csvRecordsArray = await (<string>csvData).split(/\r\n|\n/).filter((row:string) => ![",,,,,,,,,,,",""].includes(row));
+
+      //   const headersRow = this.getHeaderArray(csvRecordsArray);
+
+      //   const records = await this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
+      //   callback(undefined, records);
+      // };
+
+      reader.onerror = () => callback("Error is occured while reading file!", undefined);
+    } catch (error) { callback(error, undefined); }
+  }
+
+  getHeaderArray(csvRecordsArr: any) {
+    let headers = (<string>csvRecordsArr[0]).split(',');
+    let headerArray = [];
+    for (let j = 0; j < headers.length; j++) {
+      headerArray.push(headers[j]);
+    }
+    return headerArray;
+  }
+
+  async getDataRecordsArrayFromCSVFile(csvRecordsArray: any, headerLength: any) {
+    const csvArr: any[] = [];
+    const currentDate = new Date();
+
+    for (let i = 1; i < csvRecordsArray.length; i++) {
+      // const modifiedCellVal = await this.getModifiedVal((<string>csvRecordsArray[i]));
+      const curruntRecord = csvRecordsArray[i];//modifiedCellVal.split(',');
+      
+      // if (curruntRecord.length == headerLength) {
+        const csvRecord: CSVModel = new CSVModel();
+
+        csvRecord.username = curruntRecord[0].trim().toLowerCase() || "";
+        csvRecord.company = curruntRecord[1].trim().toLowerCase() || "";
+        csvRecord.designation = curruntRecord[2].trim().toLowerCase() || "";
+        csvRecord.department = curruntRecord[3].trim().toLowerCase() || "";
+        csvRecord.address = curruntRecord[4].trim().toLowerCase() || "";//.replace(new RegExp("~ ", "g"), "~").split("~").toLocaleString();
+        csvRecord.location = curruntRecord[5].trim().toLowerCase() || "";
+        csvRecord.contact = `${curruntRecord[6]}`.trim() || "";//.replace(new RegExp("~ ", "g"), "~").split("~").toLocaleString();
+        csvRecord.email = curruntRecord[7].trim().toLowerCase() || "";//.replace(new RegExp("~ ", "g"), "~").split("~").toLocaleString().toLowerCase();
+        csvRecord.source = curruntRecord[8].trim().toLowerCase() || "";
+        csvRecord.gst = curruntRecord[9].trim().toLowerCase() || "";
+        csvRecord.pan = curruntRecord[10].trim().toLowerCase() || "";
+        csvRecord.iec = curruntRecord[11].trim().toLowerCase() || "";
+        csvRecord.userId = this.utility.fetchUserSingleDetail("id") || "";
+        csvRecord.lastFollow = `${this.datePipe.transform(currentDate, "yyyy-MM-dd HH:mm:ss")}`;
+
+        csvArr.push(csvRecord);
+      // }
+    }
+
+    return csvArr;
+  }
+  
+  async getModifiedVal(cellVal:string):Promise<string> {
+    const allIndices = [];
+    const splittedLetters = cellVal.split("");
+    for(let j=0; j<splittedLetters.length; j++) { if(splittedLetters[j] == '"') allIndices.push(j); }
+    for(let k=1; k<=allIndices.length; k++) {
+      if(k%2 == 0) {
+        const quotedPart = cellVal.substring(allIndices[k-2], allIndices[k-1]).replace(new RegExp(',','g'), "~").replace(new RegExp('"','g'), " ");
+        const firtPart = cellVal.substring(0, allIndices[k-2]).replace(new RegExp('"','g'), " ");
+        const lastpart = cellVal.substring(allIndices[k-1], cellVal.length).replace(new RegExp('"','g'), " ");
+        cellVal = firtPart + quotedPart + lastpart;
+      }
+      if(k == allIndices.length) return cellVal;
+    }
+    return cellVal;
+  }
+}
+
+
+

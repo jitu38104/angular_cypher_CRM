@@ -1,0 +1,47 @@
+<div class="add-user-container w-full">
+    <div class="header flex align-items-center">
+        <div class="mr-4"><button pButton pRipple label="Back" class="p-button-danger" routerLink="/admin"></button></div>
+        <h3 class="text-center m-0">Add User</h3>
+    </div>
+
+    <div class="form-container">
+        <div class="form mx-auto mt-8">
+            <div class="input-field">
+                <input type="text" [(ngModel)]="userDataObj.userName" placeholder="Full Name" pInputText />
+            </div>
+            <div class="input-field">
+                <input type="email" [(ngModel)]="userDataObj.userEmail" placeholder="Email" pInputText />
+            </div>
+            <div class="input-field">
+                <input type="number" [(ngModel)]="userDataObj.userPhone" placeholder="Phone Number" pInputText />
+            </div>
+            <div class="input-field">
+                <Select id="roleDropdown" (change)="onChangeRole($event)">
+                    <option value="">--Select Role--</option>
+                    <option value="{{item?.id}}" *ngFor="let item of roles">{{item?.name | titlecase}}</option>
+                </Select>
+            </div>
+            <div class="role-access">
+                <div class="row">
+                    <div class="access col-4 flex justify-content-center align-items-center" [style]="{'pointer-events': isCustomMode?'auto':'none'}" *ngFor="let item of permissions;let i=index">
+                        <label for="check-{{i+1}}">{{item?.label | titlecase}}</label>
+                        <input type="checkbox" (click)="onCheckClick($event, item)" [checked]="item?.flag" name="" id="check-{{i+1}}" />                        
+                        <!-- <p-checkbox [(ngModel)]="item.flag" [disabled]="!isCustomMode" inputId="check-{{i+1}}" ></p-checkbox> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="role-access admin-opts" *ngIf="isAdminOptSelected">
+                <div class="title w-full"><h5 class="mx-auto">Admin Options Permissions</h5></div>
+                <div class="row">
+                    <div class="access col-4 flex justify-content-center align-items-center" *ngFor="let item of adminPermissions;let i=index">
+                        <label for="check-{{i+1}}">{{item?.label | titlecase}}</label>
+                        <input type="checkbox" (click)="onCheckClick($event, item)" [checked]="item?.flag" name="" id="check-{{i+1}}" />                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="submitBtn text-center mb-4"><button (click)="onSubmitAddUser()" pButton pRipple label="{{isAPIinProgress?'Submitting...':'Submit'}}" class="p-button-success"></button></div>
+        </div>
+    </div>
+</div>

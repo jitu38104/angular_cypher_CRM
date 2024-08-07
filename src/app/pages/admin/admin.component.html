@@ -1,0 +1,21 @@
+<div *ngIf="true" class="admin-container flex justify-content-center align-items-center w-full h-full">
+    <div class="grid row-gap-5 w-7" *ngIf="!isRouterActivate">
+        <div class="col-12"><h1 class="text-center">Admin Panel</h1></div>
+        <div class="col-4 opacity-{{item?.isDisable?'60':'100'}} pointer-events-{{item?.isDisable?'none':'auto'}}" (click)="isRouterActivate=true" [routerLink]="item.path" [pTooltip]="item.title" *ngFor="let item of adminOptions">
+            <div class="active-shadow option-tab bg-white w-11 mx-auto flex align-items-center justify-content-center">
+                <i class="fa-solid {{item.icon}}"></i>
+                <div class="option">{{item.lable}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full h-full" *ngIf="isRouterActivate">
+        <router-outlet (activate)="onActivateRouter($event)" (deactivate)="onDeactivateRouter()"></router-outlet>
+    </div>
+</div>
+
+
+<div *ngIf="false" class="w-full h-full bg-white flex justify-content-center align-items-center">
+    <img src="assets/images/under.gif" alt="" />
+</div>
+
